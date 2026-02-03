@@ -1,0 +1,6 @@
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\bin\Debug\prefixandpostfix.exe.config
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\bin\Debug\prefixandpostfix.exe
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\bin\Debug\prefixandpostfix.pdb
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\obj\Debug\prefixandpostfix.csproj.CoreCompileInputs.cache
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\obj\Debug\prefixandpostfix.exe
+D:\codeplayground\.net\ConsoleApp1\prefixandpostfix\obj\Debug\prefixandpostfix.pdb

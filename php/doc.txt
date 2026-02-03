@@ -1,0 +1,19 @@
+create a web page for lovely proffesioanl universsiry fulfilling the following requirements
+layout should be visually apppeling with header fotter sidebar and main content 
+
+yoy have to shoe the use of 
+formating tags
+semantic tags
+circular tags
+links
+forms inside a table
+nested list
+
+use of flex for logo, name, navbar
+proper space using justify and keep css and html together
+
+
+
+diffrenece between programming and scripting language
+diffrence 
+why is php is called as pre proccessor not the proccessor

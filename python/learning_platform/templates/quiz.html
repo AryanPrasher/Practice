@@ -1,0 +1,10 @@
+<h1>Quiz</h1>
+<form method="POST" action="{{ url_for('quiz') }}">
+    {% for q in questions %}
+    <p>{{ q.question }}</p>
+    {% for option in q.options %}
+    <input type="radio" name="{{ q.question }}" value="{{ option }}"> {{ option }}<br>
+    {% endfor %}
+    {% endfor %}
+    <button type="submit">Submit</button>
+</form>

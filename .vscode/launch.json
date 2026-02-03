@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "deviation",
+            "request": "launch",
+            "mainClass": "deviation",
+            "projectName": "codeplayground_b09d621"
+        },
+        {
+            "type": "java",
+            "name": "autobox_unbox",
+            "request": "launch",
+            "mainClass": "autobox_unbox",
+            "projectName": "codeplayground_b09d621"
+        },
+        {
+            "type": "java",
+            "name": "Implicit",
+            "request": "launch",
+            "mainClass": "Implicit",
+            "projectName": "codeplayground_b09d621"
+        },
+        {
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "enter program name, for example ${workspaceFolder}/a.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "externalTerminal"
+        }
+    ],
+    "version": "2.0.0"
+}

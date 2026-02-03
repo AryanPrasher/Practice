@@ -1,0 +1,7 @@
+D:\codeplayground\.net\ConsoleApp1\classandmethod\bin\Debug\classandmethod.exe.config
+D:\codeplayground\.net\ConsoleApp1\classandmethod\bin\Debug\classandmethod.exe
+D:\codeplayground\.net\ConsoleApp1\classandmethod\bin\Debug\classandmethod.pdb
+D:\codeplayground\.net\ConsoleApp1\classandmethod\obj\Debug\classandmethod.csprojAssemblyReference.cache
+D:\codeplayground\.net\ConsoleApp1\classandmethod\obj\Debug\classandmethod.csproj.CoreCompileInputs.cache
+D:\codeplayground\.net\ConsoleApp1\classandmethod\obj\Debug\classandmethod.exe
+D:\codeplayground\.net\ConsoleApp1\classandmethod\obj\Debug\classandmethod.pdb
