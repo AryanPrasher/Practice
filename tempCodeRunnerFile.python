@@ -1,0 +1,13 @@
+import numpy as np
+arr = np.arange(1,11)
+print(arr)
+
+
+arr1 = np.arange(5,51,5)
+print(arr1)
+
+list1 = [12, 25, 38, 41, 56]
+arr3 = np.array(list1)
+
+print(arr3)
+print(type(arr))
