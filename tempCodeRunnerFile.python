@@ -1,13 +1,41 @@
+#1111111111111111111111111111111111111111111111
+
 import numpy as np
+import pandas as pd
 arr = np.arange(1,11)
 print(arr)
 
+#22222222222222222222222222222222222222222222222
 
 arr1 = np.arange(5,51,5)
 print(arr1)
+
+#33333333333333333333333333333333333333333333333
 
 list1 = [12, 25, 38, 41, 56]
 arr3 = np.array(list1)
 
 print(arr3)
 print(type(arr))
+
+#44444444444444444444444444444444444444444444444
+
+arr2d = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+arr1d = arr2d.reshape(-1)
+
+print(arr1d)
+print(type(arr1d))
+
+#555555555555555555555555555555555555555555555555
+
+df = pd.DataFrame(
+    data=np.arange(0, 16).reshape(4, 4),
+    index=["row1", "row2", "row3", "row4"],
+    columns=["column1", "column2", "column3", "column4"]
+)
+
+print(df)
