@@ -8,16 +8,16 @@ Node *left, *right;
 
 Node(int value){
     data = value;
-    left = null;
-    right = null;
+    left = NULL;
+    right = NULL;
 }
 };
 
 class BST{
 public:
-Node *root
+Node *root;
     BST(){
-        root = null;
+        root = NULL;
     }
     Node* insert(Node* root, int value){
         if(root == NULL){
@@ -64,7 +64,7 @@ Node *root
         cout << root->data << " ";
     }
 
-}
+};
 int main()
 {
     BST tree;
