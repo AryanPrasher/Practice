@@ -65,3 +65,26 @@ public:
         cout << endl;
     }
 };
+
+
+
+int main() {
+    MaxHeap h;
+
+    h.insert(50);
+    h.insert(30);
+    h.insert(40);
+    h.insert(10);
+    h.insert(5);
+    h.insert(20);
+
+    cout << "Heap: ";
+    h.display();
+
+    h.deleteRoot();
+
+    cout << "After deletion: ";
+    h.display();
+
+    return 0;
+}
