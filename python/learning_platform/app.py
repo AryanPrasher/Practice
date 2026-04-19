@@ -10,7 +10,7 @@ from textblob import TextBlob
 # Download NLTK data
 nltk.download('punkt')
 
-app = Flask(_name_)
+app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Database setup
@@ -97,6 +97,16 @@ def respond_to_emotion(emotion):
     else:
         return f"Wow, you're in a great mood! Let's keep the positivity going! {random.choice(positive_affirmations)}"
 
+# Recommender function
+def recommend_resources(topic, user_progress):
+    """Recommend resources based on user's learning progress."""
+    available_resources = resources.get(topic, [])
+    if available_resources:
+        for resource in available_resources:
+            if resource not in user_progress:
+                return resource
+    return available_resources[0] if available_resources else "No resources available"
+
 # Routes
 @app.route('/')
 def home():
@@ -113,7 +123,7 @@ def register():
         c = conn.cursor()
         c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
-        conn.close()
+        conn.close()        
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -177,5 +187,5 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
