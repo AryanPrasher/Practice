@@ -1,7 +1,7 @@
 VIVA NOTES - HANDWRITTEN MATH CONVERTER PROJECT
 
 What does the project do?
-You draw numbers, math symbols, or alphabets on the website, click convert, and it recognizes what you drew. It can read digits (0-9), math signs (+, -, *, /), and both uppercase and lowercase letters (A-Z, a-z).
+You draw a math problem (numbers and basic math signs: +, -, *, /) on the website, click solve, and it recognizes what you drew and calculates the result (e.g., 2 + 3 = 5).
 
 How does it work?
 
@@ -15,10 +15,10 @@ Step 3 - We find each symbol you drew
 OpenCV is a library that looks at your drawing. It turns it into black and white. Then it finds each separate shape you drew like each number or symbol. It sorts them left to right like reading.
 
 Step 4 - Recognize what each shape is
-We have a model file (math_model.h5) that was trained to recognize 66 different characters (numbers, math signs, and letters). Each shape gets resized to 28x28 pixels. Then TensorFlow checks what it is and guesses the most likely character.
+We have a model file (math_model.h5) that was trained to recognize 14 different characters (digits 0-9 and math signs +, -, *, /). Each shape gets resized to 28x28 pixels. Then TensorFlow checks what it is and guesses the most likely character.
 
-Step 5 - Convert to LaTeX
-We take each recognized symbol and convert it to LaTeX format so it looks like proper math. Plus stays as plus, but multiply becomes × symbol. We send everything back to your website.
+Step 5 - Evaluate the Math Expression
+Once all the numbers and symbols are recognized in order, our Python code combines them into a string (like "2+3") and securely evaluates the mathematical result to display back to the user.
 
 Libraries used
 
@@ -50,8 +50,8 @@ Contours - The edges or outline of each shape in the image
 Base64 - A way to send images as text through the internet
 Bounding Box - A rectangle drawn around each symbol
 Threshold - Making an image pure black and white
-Balanced Dataset - We limited the number of digits so the AI doesn't get overwhelmed and forgets what letters look like. This makes the AI equally good at both.
-Synthetic Generation - Creating "fake" but realistic handwriting-like images to train the AI when real data is hard to find.
+Dynamic Evaluation - Using Python's built-in tools to resolve mathematical strings compiled directly from our AI predictions.
+Synthetic Generation - Creating "fake" but realistic handwriting-like image data to train the AI when real data like hand-drawn math operators isn't readily available.
 
 Things we could add later
 

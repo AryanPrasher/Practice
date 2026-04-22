@@ -75,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Clear Button
     clearBtn.addEventListener('click', () => {
         clearCanvas();
-        recognizedText.textContent = 'Draw something and click Recognize...';
+        recognizedText.textContent = 'Draw a math problem and click Solve...';
     });
 
     // Recognize Button
     predictBtn.addEventListener('click', async () => {
-        predictBtn.textContent = 'Processing...';
+        predictBtn.textContent = 'Solving...';
         predictBtn.disabled = true;
 
         try {
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             recognizedText.textContent = 'Error: Server not running!';
         } finally {
-            predictBtn.textContent = 'Recognize';
+            predictBtn.textContent = 'Solve';
             predictBtn.disabled = false;
         }
     });

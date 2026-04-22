@@ -18,19 +18,11 @@ app = Flask(__name__)
 MODEL_PATH = 'models/math_model.h5'
 model = None
 
-# Map numbers to symbols: 0-9 are digits, 10-13 are +, -, *, /, 14-39 are A-Z, 40-65 are a-z, 14-39 are A-Z, 40-65 are a-z
+# Map numbers to symbols: 0-9 are digits, 10-13 are +, -, *, /
 LABELS = {
     0: '0', 1: '1', 2: '2', 3: '3', 4: '4',
     5: '5', 6: '6', 7: '7', 8: '8', 9: '9',
-    10: '+', 11: '-', 12: '*', 13: '/',
-    # Uppercase letters
-    14: 'A', 15: 'B', 16: 'C', 17: 'D', 18: 'E', 19: 'F', 20: 'G', 21: 'H', 22: 'I', 23: 'J',
-    24: 'K', 25: 'L', 26: 'M', 27: 'N', 28: 'O', 29: 'P', 30: 'Q', 31: 'R', 32: 'S', 33: 'T',
-    34: 'U', 35: 'V', 36: 'W', 37: 'X', 38: 'Y', 39: 'Z',
-    # Lowercase letters
-    40: 'a', 41: 'b', 42: 'c', 43: 'd', 44: 'e', 45: 'f', 46: 'g', 47: 'h', 48: 'i', 49: 'j',
-    50: 'k', 51: 'l', 52: 'm', 53: 'n', 54: 'o', 55: 'p', 56: 'q', 57: 'r', 58: 's', 59: 't',
-    60: 'u', 61: 'v', 62: 'w', 63: 'x', 64: 'y', 65: 'z'
+    10: '+', 11: '-', 12: '*', 13: '/'
 }
 
 def load_trained_model():
@@ -111,8 +103,29 @@ def predict():
     
     # Return results to website
     recognized_text = " ".join(results)
+    eval_text = "".join(results) # without spaces for testing validity
+    
+    valid_chars = set("0123456789+-*/")
+    is_valid = all(char in valid_chars for char in eval_text)
+    
+    answer_text = ""
+    try:
+        if eval_text and is_valid:
+            ans = eval(eval_text)
+            if isinstance(ans, float) and ans.is_integer():
+                ans = int(ans)
+            # Limit decimals to 2 places if it's a float
+            elif isinstance(ans, float):
+                ans = round(ans, 2)
+                
+            answer_text = f"{recognized_text} = {ans}"
+        else:
+            answer_text = f"{recognized_text} (Not a math expression)"
+    except Exception as e:
+        answer_text = f"Found '{recognized_text}' but couldn't calculate it."
+        
     return jsonify({
-        'text': recognized_text,
+        'text': answer_text,
         'symbols': results
     })
 
