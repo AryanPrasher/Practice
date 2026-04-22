@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handwritten Text Reader</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="background-decor"></div>
+    
+    <main class="container">
+        <header>
+            <h1>Handwritten <span class="accent">Text Reader</span></h1>
+            <p>Draw numbers (0-9), letters (A-Z, a-z), or symbols (+, -, *, /) and it will recognize what you wrote.</p>
+        </header>
+
+        <section class="workspace">
+            <div class="canvas-container">
+                <canvas id="mathCanvas" width="800" height="300"></canvas>
+                <div class="canvas-controls">
+                    <button id="clearBtn" class="secondary">Clear</button>
+                    <button id="predictBtn" class="primary">Recognize</button>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="result-card">
+                    <h3>Recognized Text</h3>
+                    <div id="recognizedText" class="code-box">Draw something and click Recognize...</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>1st Year Project - Designed for Simplicity & Elegance</p>
+        </footer>
+    </main>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
