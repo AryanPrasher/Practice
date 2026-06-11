@@ -10,6 +10,10 @@ int main(){
     st.push(4);
     st.push(5);
     st.push(6);
+    cout<<st.size()<<endl;
+    st.pop();
+    cout<<st.size()<<endl;
+
 
     cout<<st.top();
 
