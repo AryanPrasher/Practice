@@ -147,3 +147,5 @@ console.log("reduce():", total);
 const numbers3 = [1, 2, 3];
 const result = numbers3.flatMap((num) => [num, num * 2]);
 console.log(result);
+
+
