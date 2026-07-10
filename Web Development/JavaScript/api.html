@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch Users</title>
+</head>
+<body>
+
+    <button id="btn">Show Data</button>
+    <ol id="userlist"></ol>
+
+    <script>
+        const btn = document.getElementById("btn");
+
+        btn.addEventListener("click", () => {
+            fetch("https://jsonplaceholder.typicode.com/users")
+                .then(res => res.json())
+                .then(data => {
+                    const userList = document.getElementById("userlist");
+
+                    userList.innerHTML = "";
+
+                    data.map(user => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `${user.name} - ${user.email}`;
+                        userList.appendChild(li);
+                    });
+                })
+        });
+    </script>
+
+</body>
+</html>
