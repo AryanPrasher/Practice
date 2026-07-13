@@ -16,8 +16,6 @@ return {
 bankaccount().withdraw(3000)
 
 
-
-
 function timer() {
     let time = 0;
     let id;
