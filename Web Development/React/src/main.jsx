@@ -8,7 +8,9 @@ import App from './App.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider>
-      <App />
+      <GlobalProvider>
+        <App />
+      </GlobalProvider>
     </MantineProvider>
-  </StrictMode>,
+  </StrictMode>
 )

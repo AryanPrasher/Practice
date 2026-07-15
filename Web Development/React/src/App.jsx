@@ -8,9 +8,10 @@ import { PrevCount } from "./Hooks/PrevCount";
 import Register from "./Hooks/Register";
 import Father from "./Props/Father";
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import { useGlobal } from "./ContextAPI/Golbalvariable";
 
 function App() {
-
+  
   {
     <BrowserRouter>
       <Routes>
