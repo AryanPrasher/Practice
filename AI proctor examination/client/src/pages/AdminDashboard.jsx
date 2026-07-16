@@ -105,7 +105,7 @@ const AdminDashboard = () => {
     <div style={{ padding: '0 24px 48px 24px', maxWidth: '1200px', margin: '0 auto' }} className="animate-fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', color: '#fff', fontFamily: 'var(--font-display)' }}>System Administrator Panel</h1>
+          <h1 style={{ fontSize: '32px', color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>System Administrator Panel</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Live platform monitoring, user authorization control, and security audit metrics</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -147,7 +147,7 @@ const AdminDashboard = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '32px' }}>
         {/* Users Table */}
         <div className="glass-panel" style={{ padding: '24px', overflowX: 'auto' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Users size={18} style={{ color: 'var(--primary)' }} /> Registered Platform Accounts
           </h3>
 
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
             <tbody>
               {users.map((u) => (
                 <tr key={u._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', fontSize: '14px' }}>
-                  <td style={{ padding: '12px', color: '#fff', fontWeight: '500' }}>{u.name}</td>
+                  <td style={{ padding: '12px', color: 'var(--text-primary)', fontWeight: '500' }}>{u.name}</td>
                   <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{u.email}</td>
                   <td style={{ padding: '12px' }}>
                     <span className="badge badge-info">{u.role}</span>
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
 
         {/* Audit Logs list */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldAlert size={18} style={{ color: 'var(--warning)' }} /> Security Audit Trails
           </h3>
 

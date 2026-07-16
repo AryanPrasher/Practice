@@ -131,7 +131,7 @@ router.post('/bulk-import', protect, authorize('admin', 'content-creator'), asyn
 // Creator/Admin: Create/edit a Test Series package including pricing
 router.post('/test-series/create', protect, authorize('admin', 'content-creator'), async (req, res) => {
   try {
-    const { id, title, description, price, isPremium, questions } = req.body;
+    const { id, title, description, price, isPremium, questions, maxViolationsAllowed } = req.body;
 
     if (id) {
       // Update
@@ -147,6 +147,7 @@ router.post('/test-series/create', protect, authorize('admin', 'content-creator'
       series.description = description || series.description;
       series.price = price !== undefined ? Number(price) : series.price;
       series.isPremium = isPremium !== undefined ? Boolean(isPremium) : series.isPremium;
+      series.maxViolationsAllowed = maxViolationsAllowed !== undefined ? Number(maxViolationsAllowed) : series.maxViolationsAllowed;
       if (questions) series.questions = questions;
 
       await series.save();
@@ -158,6 +159,7 @@ router.post('/test-series/create', protect, authorize('admin', 'content-creator'
         description,
         price: price !== undefined ? Number(price) : 0.0,
         isPremium: isPremium !== undefined ? Boolean(isPremium) : false,
+        maxViolationsAllowed: maxViolationsAllowed !== undefined ? Number(maxViolationsAllowed) : 3,
         questions: questions || [],
         creatorId: req.user._id
       });

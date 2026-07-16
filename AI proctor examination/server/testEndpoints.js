@@ -6,8 +6,8 @@ const listExpressRoutes = (app) => {
 
   const print = (path, layer) => {
     if (layer.route) {
-      layer.route.stack.forEach((stackItem) => {
-        const method = stackItem.method.toUpperCase();
+      const methods = Object.keys(layer.route.methods).map(m => m.toUpperCase());
+      methods.forEach((method) => {
         routes.push({
           method,
           path: `${path}${layer.route.path}`

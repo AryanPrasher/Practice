@@ -27,7 +27,7 @@ const responseSchema = new mongoose.Schema({
 const flagSchema = new mongoose.Schema({
   eventType: {
     type: String,
-    enum: ['tab-switch', 'face-not-visible', 'multiple-faces'],
+    enum: ['tab-switch', 'face-not-visible', 'multiple-faces', 'device-detected'],
     required: true,
   },
   timestamp: {
@@ -46,6 +46,9 @@ const flagSchema = new mongoose.Schema({
   adminComment: {
     type: String,
     default: '',
+  },
+  metadata: {
+    type: mongoose.Schema.Types.Mixed,
   },
 });
 
@@ -83,7 +86,7 @@ const testSessionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['active', 'completed', 'disqualified'],
+      enum: ['active', 'paused', 'completed', 'disqualified'],
       default: 'active',
     },
     reviewStatus: {
@@ -100,6 +103,18 @@ const testSessionSchema = new mongoose.Schema(
       type: Number,
       default: 0.0,
     },
+    bookmarkedQuestions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
+      }
+    ],
+    skippedQuestions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question',
+      }
+    ],
   },
   {
     timestamps: true,

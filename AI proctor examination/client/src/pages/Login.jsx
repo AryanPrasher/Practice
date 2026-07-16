@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', padding: '24px' }}>
       <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '420px', padding: '32px' }}>
-        <h2 style={{ fontSize: '28px', color: '#fff', textAlign: 'center', marginBottom: '8px' }}>Welcome Back</h2>
+        <h2 style={{ fontSize: '28px', color: 'var(--text-primary)', textAlign: 'center', marginBottom: '8px' }}>Welcome Back</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: '14px', textAlign: 'center', marginBottom: '24px' }}>
           Sign in to your ApexProctor account
         </p>

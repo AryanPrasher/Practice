@@ -47,11 +47,10 @@ export const getItemInformation = (theta, a, b, c) => {
  * @returns {{theta: number, standardError: number}} Updated theta and Standard Error
  */
 export const estimateThetaEAP = (responses) => {
-  // Define grid points from -4.0 to +4.0 with step 0.1 (81 points)
-  const numPoints = 81;
+  // Define grid points from -4.0 to +4.0 with step 0.05 (161 points)
+  const numPoints = 161;
   const minTheta = -4.0;
-  const maxTheta = 4.0;
-  const step = (maxTheta - minTheta) / (numPoints - 1);
+  const step = 0.05;
   
   const thetaGrid = [];
   const prior = [];

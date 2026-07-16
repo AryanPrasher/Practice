@@ -78,7 +78,7 @@ const Leaderboard = () => {
     <div style={{ padding: '0 24px 48px 24px', maxWidth: '1000px', margin: '0 auto' }} className="animate-fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', color: '#fff', fontFamily: 'var(--font-display)' }}>Peer Leaderboards</h1>
+          <h1 style={{ fontSize: '32px', color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>Peer Leaderboards</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Compare your performance parameters against peers globally</p>
         </div>
         
@@ -88,7 +88,7 @@ const Leaderboard = () => {
             className="form-input"
             value={selectedSeriesId}
             onChange={(e) => setSelectedSeriesId(e.target.value)}
-            style={{ background: 'var(--bg-surface)', borderColor: 'var(--primary)', color: '#fff', fontWeight: '600' }}
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--primary)', color: 'var(--text-primary)', fontWeight: '600' }}
           >
             <option value="global">Global Standings (by θ)</option>
             {testSeries.map((s) => (
@@ -109,7 +109,7 @@ const Leaderboard = () => {
           {/* Neighbors Context Card (User Rank) */}
           {userRankData && userRankData.userRank && (
             <div className="glass-panel" style={{ padding: '24px', borderLeft: '4px solid var(--secondary)' }}>
-              <h3 style={{ fontSize: '16px', color: '#fff', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3 style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Users size={16} style={{ color: 'var(--secondary)' }} /> Your Placement Neighbors
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px' }}>
@@ -142,7 +142,7 @@ const Leaderboard = () => {
 
           {/* Main Leaderboard Table */}
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Trophy size={18} style={{ color: 'var(--warning)' }} /> 
               {selectedSeriesId === 'global' ? 'Global Ability Leaderboard (Top 100)' : 'Series Best Score Standings'}
             </h3>
@@ -184,7 +184,7 @@ const Leaderboard = () => {
                         <td style={{ padding: '12px', fontWeight: 'bold', color: idx === 0 ? 'var(--warning)' : idx === 1 ? 'var(--text-secondary)' : idx === 2 ? '#b45309' : 'var(--text-muted)' }}>
                           #{entry.rank || idx + 1}
                         </td>
-                        <td style={{ padding: '12px', color: '#fff', fontWeight: '500' }}>
+                        <td style={{ padding: '12px', color: 'var(--text-primary)', fontWeight: '500' }}>
                           {entry.name} {entry.userId === user?._id && '(You)'}
                         </td>
                         {selectedSeriesId === 'global' ? (
@@ -212,7 +212,7 @@ const Leaderboard = () => {
 
           {/* Monthly Trends Sidebar/Row */}
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h3 style={{ fontSize: '16px', color: '#fff', marginBottom: '16px' }}>Top Monthly Performers</h3>
+            <h3 style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '16px' }}>Top Monthly Performers</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
               {trends.slice(0, 3).map((trend, idx) => (
                 <div key={idx} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', padding: '16px' }}>
@@ -220,7 +220,7 @@ const Leaderboard = () => {
                     <span>#{trend.rank} Monthly Star</span>
                     <span>{new Date(trend.date).toLocaleDateString()}</span>
                   </div>
-                  <strong style={{ color: '#fff', fontSize: '14px', display: 'block', marginBottom: '4px' }}>{trend.name}</strong>
+                  <strong style={{ color: 'var(--text-primary)', fontSize: '14px', display: 'block', marginBottom: '4px' }}>{trend.name}</strong>
                   <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                     {trend.testTitle} — <strong>{trend.score}%</strong>
                   </span>

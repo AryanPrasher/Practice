@@ -8,7 +8,45 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <nav className="glass-panel" style={{
+        position: 'sticky',
+        top: '16px',
+        margin: '16px 24px',
+        padding: '12px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        zIndex: 100,
+        borderRadius: 'var(--radius-md)',
+        background: '#ffffff'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+          <Link to="/" style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '22px',
+            fontWeight: '800',
+            color: 'var(--text-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              ApexProctor
+            </span>
+          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <Link to="/" style={{ color: 'var(--text-secondary)', fontWeight: '500', fontSize: '14px' }}>Home</Link>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <Link to="/login" className="btn-secondary" style={{ padding: '8px 16px', textDecoration: 'none', fontSize: '13px' }}>Sign In</Link>
+          <Link to="/register" className="btn-primary" style={{ padding: '8px 16px', textDecoration: 'none', fontSize: '13px' }}>Sign Up</Link>
+        </div>
+      </nav>
+    );
+  }
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
@@ -34,7 +72,7 @@ const Navbar = () => {
           fontFamily: 'var(--font-display)',
           fontSize: '22px',
           fontWeight: '800',
-          color: '#fff',
+          color: 'var(--text-primary)',
           display: 'flex',
           alignItems: 'center',
           gap: '8px'
@@ -80,7 +118,7 @@ const Navbar = () => {
         <div style={{ position: 'relative' }}>
           <button 
             onClick={() => setShowNotifications(!showNotifications)}
-            style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', padding: '8px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', padding: '8px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <Bell size={18} />
             {unreadCount > 0 && (
@@ -89,7 +127,7 @@ const Navbar = () => {
                 top: '-4px',
                 right: '-4px',
                 background: 'var(--danger)',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 borderRadius: '50%',
                 width: '18px',
                 height: '18px',
@@ -137,7 +175,7 @@ const Navbar = () => {
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'center' }}>
-                        <strong style={{ fontSize: '12px', color: '#fff' }}>{n.title}</strong>
+                        <strong style={{ fontSize: '12px', color: 'var(--text-primary)' }}>{n.title}</strong>
                         {!n.isRead && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary)', marginLeft: 'auto' }}></span>}
                       </div>
                       <p style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>{n.message}</p>

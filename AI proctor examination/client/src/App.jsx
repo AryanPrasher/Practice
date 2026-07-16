@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
 // Page Imports
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -24,6 +25,9 @@ function App() {
           
           <main style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
             <Routes>
+              {/* Public Landing Page */}
+              <Route path="/" element={<LandingPage />} />
+
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

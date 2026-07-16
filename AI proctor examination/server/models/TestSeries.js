@@ -19,6 +19,10 @@ const testSeriesSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    maxViolationsAllowed: {
+      type: Number,
+      default: 3,
+    },
     questions: [
       {
         type: mongoose.Schema.Types.ObjectId,

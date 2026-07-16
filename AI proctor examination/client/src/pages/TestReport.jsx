@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { RefreshCw, FileText, CheckCircle, XCircle, Clock, Percent } from 'lucide-react';
+import { RefreshCw, FileText, CheckCircle, XCircle, Clock, Percent, Award } from 'lucide-react';
 
 const TestReport = () => {
   const { sessionId } = useParams();
@@ -99,7 +99,7 @@ const TestReport = () => {
     <div style={{ padding: '0 24px 48px 24px', maxWidth: '1000px', margin: '0 auto' }} className="animate-fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', color: '#fff', fontFamily: 'var(--font-display)' }}>Exam Score Card</h1>
+          <h1 style={{ fontSize: '32px', color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>Exam Score Card</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Detailed post-test analytics for {report.title}</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
@@ -146,19 +146,19 @@ const TestReport = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginBottom: '40px' }}>
         {/* Answers breakdown */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '20px' }}>Response Integrity Summary</h3>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '20px' }}>Response Integrity Summary</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
               <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CheckCircle size={16} style={{ color: 'var(--success)' }} /> Correct Answers
               </span>
-              <strong style={{ color: '#fff' }}>{report.correctAnswers}</strong>
+              <strong style={{ color: 'var(--text-primary)' }}>{report.correctAnswers}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
               <span style={{ color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <XCircle size={16} style={{ color: 'var(--danger)' }} /> Incorrect Answers
               </span>
-              <strong style={{ color: '#fff' }}>{report.wrongAnswers}</strong>
+              <strong style={{ color: 'var(--text-primary)' }}>{report.wrongAnswers}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Adaptive Final Theta (Ability level)</span>
@@ -169,7 +169,7 @@ const TestReport = () => {
 
         {/* Skill tag performance bars */}
         <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '20px' }}>Category-Wise Accuracy</h3>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '20px' }}>Category-Wise Accuracy</h3>
           {skills.length === 0 ? (
             <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>No category details available.</p>
           ) : (
@@ -177,7 +177,7 @@ const TestReport = () => {
               {skills.map((s, idx) => (
                 <div key={idx}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '6px' }}>
-                    <span style={{ color: '#fff', textTransform: 'capitalize', fontWeight: '500' }}>{s.category}</span>
+                    <span style={{ color: 'var(--text-primary)', textTransform: 'capitalize', fontWeight: '500' }}>{s.category}</span>
                     <span style={{ color: 'var(--text-secondary)' }}>{s.accuracy}% ({s.correct}/{s.total})</span>
                   </div>
                   <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -197,7 +197,7 @@ const TestReport = () => {
 
       {/* SVG Line Chart for IRT Theta progression */}
       <div className="glass-panel" style={{ padding: '32px' }}>
-        <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '24px' }}>IRT Adaptive Ability Progression Curve</h3>
+        <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '24px' }}>IRT Adaptive Ability Progression Curve</h3>
         <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '20px' }}>
           This visual represents how the adaptive engine calibrated your skill level ($\theta$) following each correct and incorrect response.
         </p>

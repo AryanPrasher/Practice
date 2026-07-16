@@ -126,7 +126,7 @@ const AdminReview = () => {
     <div style={{ padding: '0 24px 48px 24px', maxWidth: '1200px', margin: '0 auto' }} className="animate-fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', color: '#fff', fontFamily: 'var(--font-display)' }}>Anti-Cheat Flag Review Workflow</h1>
+          <h1 style={{ fontSize: '32px', color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>Anti-Cheat Flag Review Workflow</h1>
           <p style={{ color: 'var(--text-secondary)' }}>Review candidate behavioral violation logs, timelines, and authorize score decisions</p>
         </div>
         <button onClick={fetchFlagged} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -143,7 +143,7 @@ const AdminReview = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '400px 1fr', gap: '32px' }}>
         {/* Left Column: Flagged Sessions List */}
         <div className="glass-panel" style={{ padding: '24px', height: 'fit-content' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShieldAlert size={18} style={{ color: 'var(--danger)' }} /> Pending review list
           </h3>
 
@@ -169,7 +169,7 @@ const AdminReview = () => {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <strong style={{ fontSize: '14px', color: '#fff' }}>{s.user?.name}</strong>
+                    <strong style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{s.user?.name}</strong>
                     <span className={`badge ${s.reviewStatus === 'pending' ? 'badge-warning' : s.reviewStatus === 'confirmed-cheat' ? 'badge-danger' : 'badge-success'}`} style={{ fontSize: '9px' }}>
                       {s.reviewStatus}
                     </span>
@@ -198,7 +198,7 @@ const AdminReview = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
               {/* Actions panel */}
               <div className="glass-panel" style={{ padding: '24px' }}>
-                <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '16px' }}>Authorizations & Reviews Decisions</h3>
+                <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '16px' }}>Authorizations & Reviews Decisions</h3>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
                   <button onClick={() => handleUpdateStatus('dismissed')} className="btn-secondary" style={{ borderColor: 'var(--success)', color: 'var(--success)' }}>
                     Dismiss Flags (Clear Candidate)
@@ -252,7 +252,7 @@ const AdminReview = () => {
 
               {/* Event timeline */}
               <div className="glass-panel" style={{ padding: '24px' }}>
-                <h3 style={{ fontSize: '18px', color: '#fff', marginBottom: '24px' }}>Temporal Event Timeline</h3>
+                <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '24px' }}>Temporal Event Timeline</h3>
                 
                 <div style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                   {timeline.map((event, idx) => {

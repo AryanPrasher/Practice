@@ -142,8 +142,18 @@ router.post('/end', protect, async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized access to end session' });
     }
 
-    if (session.status === 'completed') {
-      return res.status(200).json({ message: 'Session already completed', session });
+    if (req.body.action === 'disqualify') {
+      session.status = 'disqualified';
+      session.reviewStatus = 'confirmed-cheat';
+      session.totalScore = 0;
+      session.percentile = 0;
+      session.endTime = new Date();
+      await session.save();
+      return res.status(200).json({ message: 'Session auto-disqualified due to security violations', session });
+    }
+
+    if (session.status === 'completed' || session.status === 'disqualified') {
+      return res.status(200).json({ message: 'Session already finalized', session });
     }
 
     session.status = 'completed';

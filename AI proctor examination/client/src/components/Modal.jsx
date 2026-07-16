@@ -25,7 +25,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         boxShadow: 'var(--shadow-glow)',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
-          <h3 style={{ fontSize: '18px', color: '#fff' }}>{title}</h3>
+          <h3 style={{ fontSize: '18px', color: 'var(--text-primary)' }}>{title}</h3>
           <button 
             onClick={onClose}
             style={{

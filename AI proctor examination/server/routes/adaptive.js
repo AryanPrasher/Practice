@@ -1,85 +1,71 @@
 import express from 'express';
 import { protect } from '../middleware/auth.js';
-import { authorize } from '../middleware/role.js';
 import TestSession from '../models/TestSession.js';
 import Question from '../models/Question.js';
 import TestSeries from '../models/TestSeries.js';
-import { estimateThetaEAP, getItemInformation, calibrateDifficulty } from '../services/irtEngine.js';
+import { estimateThetaEAP, getItemInformation } from '../services/irtEngine.js';
 
 const router = express.Router();
 
-// 1. POST /api/adaptive/initialize
-// Initialize adaptive session, sets initial theta
-router.post('/initialize', protect, async (req, res) => {
-  try {
-    const { testSeriesId } = req.body;
-    
-    // Check if test series exists
-    const testSeries = await TestSeries.findById(testSeriesId);
-    if (!testSeries) {
-      return res.status(404).json({ message: 'Test series not found' });
+// Helper to compute EAP ability theta and standard error for a session
+const computeSessionThetaDetails = async (session) => {
+  const previousResponses = [];
+  for (const resItem of session.responses) {
+    const q = await Question.findById(resItem.questionId);
+    if (q) {
+      previousResponses.push({
+        isCorrect: resItem.isCorrect,
+        a: q.discrimination,
+        b: q.difficulty,
+        c: q.guessing,
+      });
     }
-
-    // Check if user has access if it's premium
-    if (testSeries.isPremium && !req.user.purchasedTestSeries.includes(testSeriesId) && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Please purchase this premium test series to start' });
-    }
-
-    // Check if there is an active session
-    let session = await TestSession.findOne({
-      user: req.user._id,
-      testSeries: testSeriesId,
-      status: 'active',
-    });
-
-    if (session) {
-      return res.status(200).json({ message: 'Active session found', session });
-    }
-
-    // Create a new active adaptive session
-    session = new TestSession({
-      user: req.user._id,
-      testSeries: testSeriesId,
-      currentTheta: 0.0,
-      abilityHistory: [0.0],
-      responses: [],
-      currentQuestionIndex: 0,
-      startTime: new Date(),
-      status: 'active',
-      reviewStatus: 'clean',
-    });
-
-    await session.save();
-    return res.status(201).json({ message: 'Adaptive session initialized', session });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
   }
-});
+  return estimateThetaEAP(previousResponses);
+};
 
-// 2. GET /api/adaptive/next-question
-// Get next adaptive question based on current theta and category
+// a. GET /api/adaptive/next-question – Start/resume and fetch next item
 router.get('/next-question', protect, async (req, res) => {
   try {
     const { sessionId } = req.query;
-    const session = await TestSession.findById(sessionId).populate('testSeries');
-    if (!session || session.status !== 'active') {
-      return res.status(404).json({ message: 'Active session not found' });
+    if (!sessionId) {
+      return res.status(400).json({ message: 'Session ID is required' });
     }
 
-    // Get list of already answered questions
-    const answeredIds = session.responses.map((r) => r.questionId.toString());
+    const session = await TestSession.findById(sessionId).populate('testSeries');
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
 
-    // Retrieve all questions in this test series
+    // Auto-resume if paused
+    if (session.status === 'paused') {
+      session.status = 'active';
+      await session.save();
+    }
+
+    if (session.status !== 'active') {
+      return res.status(400).json({ message: `Session status is ${session.status}` });
+    }
+
+    // Filter out answered and skipped questions
+    const answeredIds = session.responses.map(r => r.questionId.toString());
+    const skippedIds = (session.skippedQuestions || []).map(id => id.toString());
+    const excludedIds = [...answeredIds, ...skippedIds];
+
     const testSeries = await TestSeries.findById(session.testSeries._id).populate('questions');
-    const availableQuestions = testSeries.questions.filter(
-      (q) => !answeredIds.includes(q._id.toString()) && q.status === 'active'
+    const availableQuestions = (testSeries.questions || []).filter(
+      (q) => !excludedIds.includes(q._id.toString())
     );
 
     if (availableQuestions.length === 0) {
+      // Completed - auto finalize
+      session.status = 'completed';
+      session.endTime = new Date();
+      await session.save();
       return res.status(200).json({ message: 'No more questions available. Test completed.', finished: true });
     }
 
-    // Select the question with the maximum Item Information Function (IIF) at the current theta
+    // Select the question with the maximum Item Information Function (IIF) at current theta
     let bestQuestion = null;
     let maxInfo = -Infinity;
 
@@ -91,7 +77,11 @@ router.get('/next-question', protect, async (req, res) => {
       }
     }
 
-    // Return the question (hiding correct answer index from client)
+    if (!bestQuestion) {
+      return res.status(500).json({ message: 'Could not select an appropriate question.' });
+    }
+
+    // Hide correct answer index from the client for security
     const questionObj = {
       _id: bestQuestion._id,
       text: bestQuestion.text,
@@ -107,11 +97,13 @@ router.get('/next-question', protect, async (req, res) => {
   }
 });
 
-// 3. POST /api/adaptive/submit-response
-// Submit answer for current question, updates theta using 2PL/3PL
+// b. POST /api/adaptive/submit-response – Submit answer, update theta, receive feedback
 router.post('/submit-response', protect, async (req, res) => {
   try {
     const { sessionId, questionId, selectedOptionIndex, timeSpent } = req.body;
+    if (!sessionId || !questionId || selectedOptionIndex === undefined) {
+      return res.status(400).json({ message: 'Session ID, question ID, and answer index are required' });
+    }
 
     const session = await TestSession.findById(sessionId);
     if (!session || session.status !== 'active') {
@@ -123,28 +115,27 @@ router.post('/submit-response', protect, async (req, res) => {
       return res.status(404).json({ message: 'Question not found' });
     }
 
-    // Verify question is not already answered
-    const alreadyAnswered = session.responses.some((r) => r.questionId.toString() === questionId);
+    // Verify question is not already answered or skipped
+    const alreadyAnswered = session.responses.some(r => r.questionId.toString() === questionId);
     if (alreadyAnswered) {
       return res.status(400).json({ message: 'Question already answered' });
     }
 
     const isCorrect = question.correctOptionIndex === Number(selectedOptionIndex);
 
-    // Prepare responses data structure for EAP engine
-    // We need to fetch parameters for all previously answered questions as well
+    // Fetch parameters for all answered questions, including this new response
     const previousResponses = [];
     for (const resItem of session.responses) {
       const q = await Question.findById(resItem.questionId);
-      previousResponses.push({
-        isCorrect: resItem.isCorrect,
-        a: q.discrimination,
-        b: q.difficulty,
-        c: q.guessing,
-      });
+      if (q) {
+        previousResponses.push({
+          isCorrect: resItem.isCorrect,
+          a: q.discrimination,
+          b: q.difficulty,
+          c: q.guessing,
+        });
+      }
     }
-
-    // Append current response details
     previousResponses.push({
       isCorrect,
       a: question.discrimination,
@@ -152,15 +143,15 @@ router.post('/submit-response', protect, async (req, res) => {
       c: question.guessing,
     });
 
-    // Compute new theta and standard error
-    const { theta } = estimateThetaEAP(previousResponses);
+    // Estimate new theta ability and Standard Error (SE)
+    const { theta, standardError } = estimateThetaEAP(previousResponses);
 
-    // Save response details to the session
+    // Record response details
     session.responses.push({
       questionId,
-      selectedOptionIndex,
+      selectedOptionIndex: Number(selectedOptionIndex),
       isCorrect,
-      timeSpent: timeSpent || 0,
+      timeSpent: Number(timeSpent) || 0,
       thetaAfter: theta,
     });
 
@@ -175,107 +166,171 @@ router.post('/submit-response', protect, async (req, res) => {
       isCorrect,
       correctOptionIndex: question.correctOptionIndex,
       newTheta: theta,
+      standardError,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-// 4. GET /api/adaptive/session-progress
-// Get current theta, ability history, and list of answered questions
-router.get('/session-progress', protect, async (req, res) => {
+// c. GET /api/adaptive/status – Current ability, SE, questions answered
+router.get('/status', protect, async (req, res) => {
   try {
     const { sessionId } = req.query;
-    const session = await TestSession.findById(sessionId)
-      .populate('responses.questionId', 'text category difficulty');
-    if (!session) {
-      return res.status(404).json({ message: 'Session not found' });
+    if (!sessionId) {
+      return res.status(400).json({ message: 'Session ID is required' });
     }
 
-    return res.status(200).json({
-      currentTheta: session.currentTheta,
-      abilityHistory: session.abilityHistory,
-      responsesCount: session.responses.length,
-      responses: session.responses,
-    });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-// 5. GET /api/adaptive/item-information
-// Calculate Item Information Function (IIF) for a question at different thetas
-router.get('/item-information', protect, async (req, res) => {
-  try {
-    const { questionId } = req.query;
-    const q = await Question.findById(questionId);
-    if (!q) {
-      return res.status(404).json({ message: 'Question not found' });
-    }
-
-    // Generate curve points for theta from -3.0 to +3.0
-    const infoCurve = [];
-    for (let t = -3.0; t <= 3.0; t += 0.5) {
-      const info = getItemInformation(t, q.discrimination, q.difficulty, q.guessing);
-      infoCurve.push({ theta: t, information: parseFloat(info.toFixed(4)) });
-    }
-
-    return res.status(200).json({ questionId: q._id, text: q.text, infoCurve });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-// 6. POST /api/adaptive/reset
-// Reset/restart adaptive test session
-router.post('/reset', protect, async (req, res) => {
-  try {
-    const { sessionId } = req.body;
     const session = await TestSession.findById(sessionId);
     if (!session) {
       return res.status(404).json({ message: 'Session not found' });
     }
 
-    // Ensure session belongs to user
-    if (session.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Unauthorized session reset' });
-    }
+    const { theta, standardError } = await computeSessionThetaDetails(session);
 
-    session.currentTheta = 0.0;
-    session.abilityHistory = [0.0];
-    session.responses = [];
-    session.currentQuestionIndex = 0;
-    session.startTime = new Date();
-    session.endTime = undefined;
-    session.status = 'active';
-    session.proctoringFlags = [];
-    session.reviewStatus = 'clean';
-    session.totalScore = 0;
-    session.percentile = 0;
-
-    await session.save();
-    return res.status(200).json({ message: 'Session reset successfully', session });
+    return res.status(200).json({
+      currentTheta: session.currentTheta || theta,
+      standardError,
+      questionsAnswered: session.responses.length,
+      status: session.status,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-// 7. PUT /api/adaptive/calibrate-question
-// Admin: Adjust a, b, c parameters of a question based on stats
-router.put('/calibrate-question', protect, authorize('admin', 'content-creator'), async (req, res) => {
+// d. POST /api/adaptive/pause – Pause session
+router.post('/pause', protect, async (req, res) => {
   try {
-    const { questionId, manualB, manualA, manualC } = req.body;
-    const q = await Question.findById(questionId);
-    if (!q) {
-      return res.status(404).json({ message: 'Question not found' });
+    const { sessionId } = req.body;
+    if (!sessionId) {
+      return res.status(400).json({ message: 'Session ID is required' });
     }
 
-    if (manualB !== undefined) q.difficulty = Number(manualB);
-    if (manualA !== undefined) q.discrimination = Number(manualA);
-    if (manualC !== undefined) q.guessing = Number(manualC);
+    const session = await TestSession.findById(sessionId);
+    if (!session || session.status !== 'active') {
+      return res.status(404).json({ message: 'Active session not found' });
+    }
 
-    await q.save();
-    return res.status(200).json({ message: 'Question parameters calibrated', question: q });
+    session.status = 'paused';
+    await session.save();
+
+    return res.status(200).json({ message: 'Session paused successfully', session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// e. POST /api/adaptive/resume – Resume and return next question
+router.post('/resume', protect, async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    if (!sessionId) {
+      return res.status(400).json({ message: 'Session ID is required' });
+    }
+
+    const session = await TestSession.findById(sessionId).populate('testSeries');
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    session.status = 'active';
+    await session.save();
+
+    // Fetch and return the next question
+    const answeredIds = session.responses.map(r => r.questionId.toString());
+    const skippedIds = (session.skippedQuestions || []).map(id => id.toString());
+    const excludedIds = [...answeredIds, ...skippedIds];
+
+    const testSeries = await TestSeries.findById(session.testSeries._id).populate('questions');
+    const availableQuestions = (testSeries.questions || []).filter(
+      (q) => !excludedIds.includes(q._id.toString())
+    );
+
+    if (availableQuestions.length === 0) {
+      session.status = 'completed';
+      session.endTime = new Date();
+      await session.save();
+      return res.status(200).json({ message: 'No more questions available. Test completed.', finished: true });
+    }
+
+    let bestQuestion = null;
+    let maxInfo = -Infinity;
+
+    for (const q of availableQuestions) {
+      const info = getItemInformation(session.currentTheta, q.discrimination, q.difficulty, q.guessing);
+      if (info > maxInfo) {
+        maxInfo = info;
+        bestQuestion = q;
+      }
+    }
+
+    const questionObj = {
+      _id: bestQuestion._id,
+      text: bestQuestion.text,
+      options: bestQuestion.options,
+      category: bestQuestion.category,
+      difficulty: bestQuestion.difficulty,
+      discrimination: bestQuestion.discrimination,
+    };
+
+    return res.status(200).json({ question: questionObj, finished: false, session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// f. POST /api/adaptive/skip – Skip a question (if allowed by test config)
+router.post('/skip', protect, async (req, res) => {
+  try {
+    const { sessionId, questionId, timeSpent } = req.body;
+    if (!sessionId || !questionId) {
+      return res.status(400).json({ message: 'Session ID and question ID are required' });
+    }
+
+    const session = await TestSession.findById(sessionId);
+    if (!session || session.status !== 'active') {
+      return res.status(404).json({ message: 'Active session not found' });
+    }
+
+    // Skip tracking: add question to skipped list
+    if (!session.skippedQuestions.includes(questionId)) {
+      session.skippedQuestions.push(questionId);
+    }
+    
+    session.currentQuestionIndex += 1;
+    await session.save();
+
+    return res.status(200).json({ message: 'Question skipped successfully', session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// g. POST /api/adaptive/flag – Bookmark a question for review
+router.post('/flag', protect, async (req, res) => {
+  try {
+    const { sessionId, questionId } = req.body;
+    if (!sessionId || !questionId) {
+      return res.status(400).json({ message: 'Session ID and question ID are required' });
+    }
+
+    const session = await TestSession.findById(sessionId);
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    // Add question to bookmarked list
+    if (!session.bookmarkedQuestions.includes(questionId)) {
+      session.bookmarkedQuestions.push(questionId);
+    }
+
+    await session.save();
+
+    return res.status(200).json({
+      message: 'Question bookmarked successfully',
+      bookmarkedQuestions: session.bookmarkedQuestions,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

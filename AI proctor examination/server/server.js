@@ -20,7 +20,16 @@ import leaderboardRoutes from './routes/leaderboards.js';
 dotenv.config();
 
 // Connect Database
-connectDB();
+connectDB().then(async () => {
+  try {
+    const count = await (await import('./models/User.js')).default.countDocuments();
+    if (count === 0) {
+      await (await import('./seedInline.js')).default();
+    }
+  } catch (err) {
+    console.error('Auto seeding failed:', err);
+  }
+});
 
 const app = express();
 
