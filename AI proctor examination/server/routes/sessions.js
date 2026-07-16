@@ -1,0 +1,205 @@
+import express from 'express';
+import { protect } from '../middleware/auth.js';
+import { authorize } from '../middleware/role.js';
+import TestSession from '../models/TestSession.js';
+import TestSeries from '../models/TestSeries.js';
+import Question from '../models/Question.js';
+
+const router = express.Router();
+
+// Helper to calculate score and accuracy
+const calculateSessionScore = (responses) => {
+  const correctCount = responses.filter(r => r.isCorrect).length;
+  const totalCount = responses.length;
+  const score = totalCount > 0 ? parseFloat(((correctCount / totalCount) * 100).toFixed(2)) : 0;
+  return score;
+};
+
+// 1. POST /api/sessions/start
+// Start standard or adaptive test session
+router.post('/start', protect, async (req, res) => {
+  try {
+    const { testSeriesId } = req.body;
+
+    const testSeries = await TestSeries.findById(testSeriesId);
+    if (!testSeries) {
+      return res.status(404).json({ message: 'Test Series not found' });
+    }
+
+    // Verify purchase for premium tests
+    if (testSeries.isPremium && !req.user.purchasedTestSeries.includes(testSeriesId) && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied: Premium test series must be purchased' });
+    }
+
+    // Check if an active session already exists for this test series
+    let session = await TestSession.findOne({
+      user: req.user._id,
+      testSeries: testSeriesId,
+      status: 'active'
+    });
+
+    if (session) {
+      return res.status(200).json({ message: 'Active session resumed', session });
+    }
+
+    session = new TestSession({
+      user: req.user._id,
+      testSeries: testSeriesId,
+      currentTheta: 0.0,
+      abilityHistory: [0.0],
+      responses: [],
+      currentQuestionIndex: 0,
+      startTime: new Date(),
+      status: 'active',
+      reviewStatus: 'clean',
+    });
+
+    await session.save();
+    return res.status(201).json({ message: 'Session started successfully', session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// 2. POST /api/sessions/answer
+// Submit an answer for a question in standard mode
+router.post('/answer', protect, async (req, res) => {
+  try {
+    const { sessionId, questionId, selectedOptionIndex, timeSpent } = req.body;
+
+    const session = await TestSession.findById(sessionId);
+    if (!session || session.status !== 'active') {
+      return res.status(404).json({ message: 'Active session not found' });
+    }
+
+    const question = await Question.findById(questionId);
+    if (!question) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+
+    // Check if already answered
+    const alreadyAnswered = session.responses.some(r => r.questionId.toString() === questionId);
+    if (alreadyAnswered) {
+      return res.status(400).json({ message: 'Question already answered' });
+    }
+
+    const isCorrect = question.correctOptionIndex === Number(selectedOptionIndex);
+
+    // Standard mode: theta does not update dynamically, or uses simple incremental estimate
+    session.responses.push({
+      questionId,
+      selectedOptionIndex,
+      isCorrect,
+      timeSpent: timeSpent || 0,
+      thetaAfter: session.currentTheta, // keeps constant or duplicates current
+    });
+
+    session.currentQuestionIndex += 1;
+    await session.save();
+
+    return res.status(200).json({
+      message: 'Answer logged',
+      isCorrect,
+      correctOptionIndex: question.correctOptionIndex
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// 3. POST /api/sessions/resume
+// Resume an existing active session, fetch progress
+router.post('/resume', protect, async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const session = await TestSession.findById(sessionId).populate('testSeries');
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    if (session.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized session access' });
+    }
+
+    return res.status(200).json({ message: 'Session loaded', session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// 4. POST /api/sessions/end
+// Submit/finish test session, calculate final score and percentile rank
+router.post('/end', protect, async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    const session = await TestSession.findById(sessionId);
+    
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    if (session.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Unauthorized access to end session' });
+    }
+
+    if (session.status === 'completed') {
+      return res.status(200).json({ message: 'Session already completed', session });
+    }
+
+    session.status = 'completed';
+    session.endTime = new Date();
+    session.totalScore = calculateSessionScore(session.responses);
+
+    // Calculate Percentile
+    // Percentile = (Number of sessions with score < currentScore) / Total completed sessions * 100
+    const otherCompletedSessions = await TestSession.find({
+      testSeries: session.testSeries,
+      status: 'completed',
+      _id: { $ne: session._id }
+    });
+
+    const totalCompetitors = otherCompletedSessions.length;
+    if (totalCompetitors > 0) {
+      const scoringLower = otherCompletedSessions.filter(s => s.totalScore < session.totalScore).length;
+      session.percentile = parseFloat(((scoringLower / totalCompetitors) * 100).toFixed(2));
+    } else {
+      session.percentile = 100.0; // Solo test taker gets 100th percentile
+    }
+
+    await session.save();
+    return res.status(200).json({ message: 'Session completed successfully', session });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// 5. GET /api/sessions/my-sessions
+// Get list of sessions taken by the current test-taker
+router.get('/my-sessions', protect, async (req, res) => {
+  try {
+    const sessions = await TestSession.find({ user: req.user._id })
+      .populate('testSeries', 'title description isPremium')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({ sessions });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// 6. GET /api/sessions/active
+// Admin/Proctor: List all active, live-monitored sessions
+router.get('/active', protect, authorize('admin'), async (req, res) => {
+  try {
+    const activeSessions = await TestSession.find({ status: 'active' })
+      .populate('user', 'name email')
+      .populate('testSeries', 'title')
+      .sort({ startTime: -1 });
+
+    return res.status(200).json({ activeSessions });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+export default router;
