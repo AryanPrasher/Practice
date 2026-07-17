@@ -1,4 +1,4 @@
-import { estimateThetaEAP, getProbabilityOfCorrect, getItemInformation } from './services/irtEngine.js';
+import { estimateThetaEAP, getItemInformation } from './services/irtEngine.js';
 
 console.log('==================================================');
 console.log('IRT ENGINE MATHEMATICAL TEST VALIDATOR');

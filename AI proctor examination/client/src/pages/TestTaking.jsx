@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProctoring } from '../hooks/useProctoring';
-import { Shield, AlertTriangle, EyeOff, Camera, ArrowRight, CheckCircle, RefreshCw } from 'lucide-react';
+import { Shield, AlertTriangle, EyeOff, Camera, ArrowRight, RefreshCw } from 'lucide-react';
 
 const TestTaking = () => {
-  const { testSeriesId } = useParams();
+  useParams(); // invoke to preserve router layout hooks if needed, or simply omit variable assignment
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('sessionId');
   
@@ -66,6 +66,7 @@ const TestTaking = () => {
     maxViolations,
     loadingModels,
     isCameraDisabled,
+    deviceSpotted,
     startProctoring,
     stopProctoring,
     logViolation,
@@ -286,9 +287,9 @@ const TestTaking = () => {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh', padding: '24px' }}>
         <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '500px', padding: '40px', textAlign: 'center' }}>
           <RefreshCw className="spin" size={64} style={{ animation: 'spin 2s linear infinite', color: 'var(--primary)', marginBottom: '24px' }} />
-          <h2 style={{ fontSize: '24px', color: 'var(--text-primary)', marginBottom: '12px' }}>Preloading Security Check</h2>
+          <h2 style={{ fontSize: '24px', color: 'var(--text-primary)', marginBottom: '12px' }}>Loading Proctoring AI</h2>
           <p style={{ color: 'var(--text-secondary)' }}>
-            Analyzing security keys & preloading face detection models...
+            Analyzing security keys & preloading face-detection and object-tracking models...
           </p>
         </div>
       </div>
@@ -432,6 +433,24 @@ const TestTaking = () => {
         ) : question ? (
           <div className="glass-panel" style={{ padding: '36px', minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
+              {/* Red Alert Chip for Device Detected */}
+              {deviceSpotted && (
+                <div style={{
+                  backgroundColor: '#f8d7da',
+                  border: '3px solid #721c24',
+                  color: '#721c24',
+                  padding: '12px 16px',
+                  borderRadius: '4px',
+                  marginBottom: '20px',
+                  fontSize: '14px',
+                  fontWeight: '900',
+                  textAlign: 'center',
+                  textTransform: 'uppercase'
+                }}>
+                  ⚠️ Device spotted! Please keep devices out of view.
+                </div>
+              )}
+
               {/* Near-threshold Compliance Warning */}
               {violationCount >= 0.8 * maxViolations && maxViolations > 0 && (
                 <div style={{

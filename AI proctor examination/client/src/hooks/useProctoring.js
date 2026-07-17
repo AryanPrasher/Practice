@@ -17,25 +17,40 @@ export const useProctoring = (sessionId, token, API_URL, onWarning, maxViolation
   const cocoModelRef = useRef(null);
   const lastTriggeredTimesRef = useRef({});
 
+  // Helper function to inject script tags dynamically
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.head.appendChild(script);
+    });
+  };
+
   // Preload face-api and COCO-SSD model weights on hook mount
   useEffect(() => {
     let active = true;
     const preloadModels = async () => {
       try {
         setLoadingModels(true);
-        let faceapi = window.faceapi;
-        let cocoSsd = window.cocoSsd;
-        let tf = window.tf;
-        let retries = 0;
-        
-        // Wait for script tags to be loaded via CDN
-        while ((!faceapi || !cocoSsd || !tf) && retries < 40) {
-          await new Promise((r) => setTimeout(r, 250));
-          faceapi = window.faceapi;
-          cocoSsd = window.cocoSsd;
-          tf = window.tf;
-          retries++;
-        }
+
+        // Inject script tags on hook mount (lazy demand loading)
+        await Promise.all([
+          loadScript('https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js'),
+          loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.19.0/dist/tf.min.js')
+        ]);
+        // coco-ssd relies on tf object, load afterwards
+        await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js');
+
+        const faceapi = window.faceapi;
+        const cocoSsd = window.cocoSsd;
 
         if (!faceapi) {
           console.warn('Face-API script was not loaded. Fallback enabled.');
@@ -46,7 +61,7 @@ export const useProctoring = (sessionId, token, API_URL, onWarning, maxViolation
           try {
             await faceapi.tf.setBackend('webgl');
             await faceapi.tf.ready();
-          } catch (err) {
+          } catch {
             console.warn('WebGL backend failed, using CPU backend');
             await faceapi.tf.setBackend('cpu');
             await faceapi.tf.ready();

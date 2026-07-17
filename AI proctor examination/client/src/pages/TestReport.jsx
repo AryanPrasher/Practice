@@ -86,14 +86,8 @@ const TestReport = () => {
     );
   }
 
-  // Draw IRT Ability History Plot using SVG
-  const abilityHistory = report.responsesCount !== undefined ? [] : [0.0]; // fallback
-  // Wait, let's look at report responses to get ability history
-  const historyPoints = report.currentTheta !== undefined ? (report.responsesCount > 0 ? [0.0] : [0.0]) : [0.0];
-  
   // Let's retrieve the abilityHistory array from session progress or reconstruct it.
   // Wait, we populated `responses.thetaAfter` which is exactly the user ability history!
-  const progressPoints = [0.0, ...report.responsesCount ? [] : []]; // We'll fetch below or read from report session-progress
   
   return (
     <div style={{ padding: '0 24px 48px 24px', maxWidth: '1000px', margin: '0 auto' }} className="animate-fade-in">

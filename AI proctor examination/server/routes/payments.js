@@ -160,25 +160,6 @@ router.get('/purchases', protect, async (req, res) => {
   }
 });
 
-// 5. GET /api/payments/verify/:testSeriesId
-// Check if user owns/has access to a specific test series
-router.get('/verify/:testSeriesId', protect, async (req, res) => {
-  try {
-    const { testSeriesId } = req.params;
-    const testSeries = await TestSeries.findById(testSeriesId);
-    if (!testSeries) {
-      return res.status(404).json({ message: 'Test series not found' });
-    }
 
-    if (!testSeries.isPremium) {
-      return res.status(200).json({ access: true, message: 'Free Access' });
-    }
-
-    const hasAccess = req.user.purchasedTestSeries.includes(testSeriesId) || req.user.role === 'admin';
-    return res.status(200).json({ access: hasAccess });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 export default router;

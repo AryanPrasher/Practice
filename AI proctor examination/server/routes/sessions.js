@@ -61,51 +61,6 @@ router.post('/start', protect, async (req, res) => {
   }
 });
 
-// 2. POST /api/sessions/answer
-// Submit an answer for a question in standard mode
-router.post('/answer', protect, async (req, res) => {
-  try {
-    const { sessionId, questionId, selectedOptionIndex, timeSpent } = req.body;
-
-    const session = await TestSession.findById(sessionId);
-    if (!session || session.status !== 'active') {
-      return res.status(404).json({ message: 'Active session not found' });
-    }
-
-    const question = await Question.findById(questionId);
-    if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
-    }
-
-    // Check if already answered
-    const alreadyAnswered = session.responses.some(r => r.questionId.toString() === questionId);
-    if (alreadyAnswered) {
-      return res.status(400).json({ message: 'Question already answered' });
-    }
-
-    const isCorrect = question.correctOptionIndex === Number(selectedOptionIndex);
-
-    // Standard mode: theta does not update dynamically, or uses simple incremental estimate
-    session.responses.push({
-      questionId,
-      selectedOptionIndex,
-      isCorrect,
-      timeSpent: timeSpent || 0,
-      thetaAfter: session.currentTheta, // keeps constant or duplicates current
-    });
-
-    session.currentQuestionIndex += 1;
-    await session.save();
-
-    return res.status(200).json({
-      message: 'Answer logged',
-      isCorrect,
-      correctOptionIndex: question.correctOptionIndex
-    });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 // 3. POST /api/sessions/resume
 // Resume an existing active session, fetch progress
@@ -197,19 +152,5 @@ router.get('/my-sessions', protect, async (req, res) => {
   }
 });
 
-// 6. GET /api/sessions/active
-// Admin/Proctor: List all active, live-monitored sessions
-router.get('/active', protect, authorize('admin'), async (req, res) => {
-  try {
-    const activeSessions = await TestSession.find({ status: 'active' })
-      .populate('user', 'name email')
-      .populate('testSeries', 'title')
-      .sort({ startTime: -1 });
-
-    return res.status(200).json({ activeSessions });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 export default router;

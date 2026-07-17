@@ -7,7 +7,7 @@ const seedInline = async () => {
     console.log('Automatic seed sequence: Seeding initial data...');
     
     // Create Admin
-    const admin = await User.create({
+    await User.create({
       name: 'Admin User',
       email: 'admin@apex.com',
       password: 'password',
@@ -23,7 +23,7 @@ const seedInline = async () => {
     });
 
     // Create Candidate
-    const candidate = await User.create({
+    await User.create({
       name: 'Demo Candidate',
       email: 'candidate@apex.com',
       password: 'password',

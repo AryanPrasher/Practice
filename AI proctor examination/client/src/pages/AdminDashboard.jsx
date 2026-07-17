@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Users, RefreshCw, BarChart2, ShieldAlert, FileSpreadsheet } from 'lucide-react';
+import { Users, RefreshCw, ShieldAlert, FileSpreadsheet } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { token, API_URL } = useAuth();

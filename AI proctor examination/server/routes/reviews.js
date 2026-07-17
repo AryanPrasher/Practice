@@ -76,7 +76,8 @@ router.get('/session-timeline/:sessionId', protect, authorize('admin'), async (r
         details: {
           severity: flag.severity,
           resolved: flag.resolved,
-          adminComment: flag.adminComment
+          adminComment: flag.adminComment,
+          metadata: flag.metadata || null
         }
       });
     });

@@ -31,34 +31,6 @@ router.post('/create', protect, authorize('admin', 'content-creator'), async (re
   }
 });
 
-// 2. PUT /api/questions/update/:id
-// Creator/Admin: Update a question
-router.put('/update/:id', protect, authorize('admin', 'content-creator'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updateData = req.body;
-
-    const question = await Question.findById(id);
-    if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
-    }
-
-    // Verify creator or admin
-    if (question.creatorId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Unauthorized modification' });
-    }
-
-    // Apply updates
-    Object.keys(updateData).forEach((key) => {
-      question[key] = updateData[key];
-    });
-
-    await question.save();
-    return res.status(200).json({ message: 'Question updated successfully', question });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 // 3. DELETE /api/questions/delete/:id
 // Creator/Admin: Delete or archive a question

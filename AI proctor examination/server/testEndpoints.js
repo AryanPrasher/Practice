@@ -46,7 +46,7 @@ setTimeout(() => {
   const apiRoutes = allRoutes.filter(r => r.path.startsWith('/api/') && !r.path.startsWith('/api/auth'));
   const authRoutes = allRoutes.filter(r => r.path.startsWith('/api/auth'));
 
-  console.log(`\nFound ${apiRoutes.length} Platform API Routes (Target: 54):`);
+  console.log(`\nFound ${apiRoutes.length} Platform API Routes (Target: 36):`);
   apiRoutes.forEach((r, idx) => {
     console.log(`${idx + 1}. [${r.method}] ${r.path}`);
   });
@@ -57,8 +57,8 @@ setTimeout(() => {
   });
 
   console.log('==================================================');
-  const success = apiRoutes.length === 54;
-  console.log(`VERIFICATION RESULT: ${success ? 'SUCCESS (Exactly 54 APIs)' : 'COUNT MISMATCH'}`);
+  const success = apiRoutes.length === 36;
+  console.log(`VERIFICATION RESULT: ${success ? 'SUCCESS (Exactly 36 APIs)' : 'COUNT MISMATCH'}`);
   console.log('==================================================\n');
 
   process.exit(success ? 0 : 1);

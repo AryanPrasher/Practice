@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Trash, BookOpen, Upload, FileText, CheckCircle, RefreshCw, Layers } from 'lucide-react';
+import { Plus, Trash, BookOpen, Upload, RefreshCw, Layers } from 'lucide-react';
 
 const ContentCreator = () => {
   const { token, API_URL } = useAuth();
   
   const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState('questions'); // 'questions' | 'testseries' | 'pool'
   
@@ -113,7 +112,7 @@ const ContentCreator = () => {
       } else {
         setMessage(data.message || 'Bulk import failed');
       }
-    } catch (err) {
+    } catch {
       setMessage('Invalid JSON format. Check syntax.');
     }
   };

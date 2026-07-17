@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, CreditCard, Play, Eye, Award, CheckCircle, RefreshCw, Trophy } from 'lucide-react';
+import { BookOpen, CreditCard, Play, Eye, Award, RefreshCw, Trophy } from 'lucide-react';
 
 const Dashboard = () => {
   const { token, API_URL, fetchNotifications } = useAuth();

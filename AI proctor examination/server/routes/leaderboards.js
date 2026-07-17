@@ -188,34 +188,6 @@ router.get('/trends', protect, async (req, res) => {
   }
 });
 
-// 5. GET /api/leaderboards/export/:testSeriesId
-// Export leaderboard data to CSV/JSON
-router.get('/export/:testSeriesId', protect, async (req, res) => {
-  try {
-    const { testSeriesId } = req.params;
-    
-    const sessions = await TestSession.find({ testSeries: testSeriesId, status: 'completed' })
-      .populate('user', 'name email')
-      .sort({ totalScore: -1, endTime: 1 });
 
-    const exportData = sessions.map((s, index) => ({
-      rank: index + 1,
-      name: s.user?.name || 'Unknown',
-      email: s.user?.email || 'N/A',
-      score: s.totalScore,
-      percentile: s.percentile,
-      theta: s.currentTheta,
-      dateCompleted: s.endTime
-    }));
-
-    return res.status(200).json({
-      testSeriesId,
-      exportDate: new Date(),
-      data: exportData
-    });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
 
 export default router;

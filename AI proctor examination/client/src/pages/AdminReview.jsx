@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { ShieldAlert, RefreshCw, FileText, CheckCircle, MessageSquare, AlertCircle } from 'lucide-react';
+import { ShieldAlert, RefreshCw, MessageSquare, AlertCircle } from 'lucide-react';
 
 const AdminReview = () => {
   const { token, API_URL } = useAuth();
@@ -14,6 +14,7 @@ const AdminReview = () => {
   const [loading, setLoading] = useState(true);
   const [timelineLoading, setTimelineLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [filterType, setFilterType] = useState('all');
 
   const fetchFlagged = async () => {
     try {
@@ -252,10 +253,34 @@ const AdminReview = () => {
 
               {/* Event timeline */}
               <div className="glass-panel" style={{ padding: '24px' }}>
-                <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', marginBottom: '24px' }}>Temporal Event Timeline</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                  <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', margin: 0 }}>Temporal Event Timeline</h3>
+                  <select 
+                    value={filterType} 
+                    onChange={(e) => setFilterType(e.target.value)}
+                    style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.02)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '13px' }}
+                  >
+                    <option value="all" style={{ background: '#222' }}>All Events</option>
+                    <option value="device-detected" style={{ background: '#222' }}>Device Detected Only</option>
+                    <option value="tab-switch" style={{ background: '#222' }}>Tab Switches Only</option>
+                    <option value="face-visible" style={{ background: '#222' }}>Camera Face Flags Only</option>
+                  </select>
+                </div>
                 
                 <div style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                  {timeline.map((event, idx) => {
+                  {timeline.filter(event => {
+                    if (filterType === 'all') return true;
+                    if (filterType === 'device-detected') {
+                      return event.type === 'violation-flag' && event.description.includes('device-detected');
+                    }
+                    if (filterType === 'tab-switch') {
+                      return event.type === 'violation-flag' && event.description.includes('tab-switch');
+                    }
+                    if (filterType === 'face-visible') {
+                      return event.type === 'violation-flag' && (event.description.includes('face-not-visible') || event.description.includes('multiple-faces'));
+                    }
+                    return true;
+                  }).map((event, idx) => {
                     const isViolation = event.type === 'violation-flag';
                     
                     return (
@@ -282,8 +307,18 @@ const AdminReview = () => {
                           <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '4px', padding: '8px 12px', fontSize: '12px', color: 'var(--text-secondary)', marginTop: '6px' }}>
                             {event.details.question && <p><strong>Question:</strong> {event.details.question}</p>}
                             {event.details.timeSpent !== undefined && <p><strong>Time spent:</strong> {event.details.timeSpent}s | <strong>Ability after (θ):</strong> {event.details.thetaAfter?.toFixed(3)}</p>}
-                            {event.details.severity && <p><strong>Severity:</strong> <span className={`badge ${event.details.severity === 'high' ? 'badge-danger' : 'badge-warning'}`} style={{ fontSize: '8px', padding: '1px 4px' }}>{event.details.severity}</span></p>}
-                            {event.details.adminComment && <p><strong>Comment:</strong> <em>{event.details.adminComment}</em></p>}
+                            
+                            {/* Device Detection details badge */}
+                            {event.description.includes('device-detected') && event.details.metadata && (
+                              <p style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span className="badge badge-danger" style={{ fontSize: '9px', padding: '2px 6px' }}>DEVICE SPOTTED</span>
+                                <strong>Object:</strong> {event.details.metadata.object} | 
+                                <strong> Confidence:</strong> {(event.details.metadata.confidence * 100).toFixed(1)}%
+                              </p>
+                            )}
+
+                            {event.details.severity && <p style={{ marginTop: '4px' }}><strong>Severity:</strong> <span className={`badge ${event.details.severity === 'high' ? 'badge-danger' : 'badge-warning'}`} style={{ fontSize: '8px', padding: '1px 4px' }}>{event.details.severity}</span></p>}
+                            {event.details.adminComment && <p style={{ marginTop: '4px' }}><strong>Comment:</strong> <em>{event.details.adminComment}</em></p>}
                           </div>
                         )}
                       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Award, ShieldAlert, RefreshCw, Trophy, Users } from 'lucide-react';
+import { RefreshCw, Trophy, Users } from 'lucide-react';
 
 const Leaderboard = () => {
   const { token, API_URL, user } = useAuth();

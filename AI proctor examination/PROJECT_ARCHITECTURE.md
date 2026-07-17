@@ -87,7 +87,7 @@ This document provides a complete technical map of the MERN application codebase
     *   `thetaAfter` (Number)
 *   `currentTheta` (Number, default 0.0)
 *   `proctoringFlags` Array of:
-    *   `eventType` (String, enum: `['tab-switch', 'face-not-visible', 'multiple-faces']`)
+    *   `eventType` (String, enum: `['tab-switch', 'face-not-visible', 'multiple-faces', 'device-detected']`)
     *   `timestamp` (Date)
     *   `severity` (String)
     *   `resolved` (Boolean)
