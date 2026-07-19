@@ -72,11 +72,22 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const startServer = (port) => {
+  const server = app.listen(port, () => {
+    console.log(`Server running in mode on port ${port}`);
+  });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running in mode on port ${PORT}`);
-});
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`Port ${port} is already in use. Trying port ${port + 1}...`);
+      startServer(port + 1);
+    } else {
+      console.error(err);
+    }
+  });
+};
+
+const PORT = process.env.PORT || 5000;
+startServer(Number(PORT));
 
 export { app };
-export default server;
