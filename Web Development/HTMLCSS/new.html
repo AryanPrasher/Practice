@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes website responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Browser Tab Title -->
+    <title>Complete HTML Revision</title>
+
+    <style>
+        /* Beginner-friendly CSS: each rule changes one simple thing. */
+
+        /* Page background, text colour, font, and outer spacing */
+        body {
+            background-color: #f2f2f2;
+            color: #222222;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        /* Blue colour for headings */
+        h1, h2, h3 {
+            color: #1d4e89;
+        }
+
+        /* Navigation bar and links */
+        nav {
+            background-color: #1d4e89;
+            padding: 12px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 12px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* White background and spacing for page areas */
+        header, section, article, aside, footer {
+            background-color: white;
+            border: 1px solid #cccccc;
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        /* The class used by the Div and Span example */
+        .box {
+            background-color: #eaf3ff;
+            border-left: 4px solid #1d4e89;
+            padding: 10px;
+        }
+
+        /* Simple table design */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #999999;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d9eaff;
+        }
+
+        /* Gives inputs and buttons a little breathing room */
+        input, select, textarea, button {
+            margin: 4px;
+            padding: 6px;
+        }
+
+        /* Makes links easier to see */
+        a {
+            color: #0b5cad;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header id="top">
+
+        <h1>Complete HTML Revision</h1>
+
+        <p>
+            This page contains almost every important HTML tag.
+        </p>
+
+        <hr>
+
+    </header>
+
+
+
+    <!-- ================= NAVIGATION ================= -->
+
+    <nav>
+
+        <a href="#about">About</a> |
+        <a href="#lists">Lists</a> |
+        <a href="#table">Table</a> |
+        <a href="#form">Form</a> |
+        <a href="#media">Media</a>
+
+    </nav>
+
+    <hr>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        <!-- ABOUT -->
+
+        <section id="about">
+
+            <h2>About HTML</h2>
+
+            <p>
+                HTML stands for
+                <strong>HyperText Markup Language</strong>.
+            </p>
+
+            <p>
+                It is used to create the
+                <em>structure</em> of web pages.
+            </p>
+
+            <p>
+                Example of line break
+                <br>
+                This text starts on a new line.
+            </p>
+
+            <p>
+                HTML Entities:
+                &lt; &gt; &amp; &copy;
+            </p>
+
+        </section>
+
+        <hr>
+
+
+        <!-- DIV & SPAN -->
+
+        <section>
+
+            <h2>Div and Span</h2>
+
+            <div class="box">
+
+                This is a DIV.
+
+                <span style="color:red;">
+                    This is SPAN inside div.
+                </span>
+
+            </div>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- IMAGE -->
+
+        <section>
+
+            <h2>Image</h2>
+
+            <img
+                src="https://picsum.photos/300/200"
+                alt="Random Image">
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- LISTS -->
+
+        <section id="lists">
+
+            <h2>Lists</h2>
+
+            <h3>Ordered List</h3>
+
+            <ol>
+
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+
+            </ol>
+
+
+            <h3>Unordered List</h3>
+
+            <ul>
+
+                <li>React</li>
+                <li>Node</li>
+                <li>MongoDB</li>
+
+            </ul>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- TABLE -->
+
+        <section id="table">
+
+            <h2>Student Table</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Course</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>Aryan</td>
+                    <td>22</td>
+                    <td>MCA</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Rahul</td>
+                    <td>21</td>
+                    <td>BCA</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- FORM -->
+
+        <section id="form">
+
+            <h2>Registration Form</h2>
+
+            <form>
+
+                <label>Name</label>
+
+                <input
+                    type="text"
+                    placeholder="Enter Name"
+                    required>
+
+                <br><br>
+
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    placeholder="Enter Email"
+                    required>
+
+                <br><br>
+
+
+                <label>Password</label>
+
+                <input
+                    type="password">
+
+                <br><br>
+
+
+                <label>Age</label>
+
+                <input
+                    type="number">
+
+                <br><br>
+
+
+                <label>Date of Birth</label>
+
+                <input
+                    type="date">
+
+                <br><br>
+
+
+                Gender
+
+                <input
+                    type="radio"
+                    name="gender">
+
+                Male
+
+                <input
+                    type="radio"
+                    name="gender">
+
+                Female
+
+                <br><br>
+
+
+                Skills
+
+                <input type="checkbox">
+
+                HTML
+
+                <input type="checkbox">
+
+                CSS
+
+                <input type="checkbox">
+
+                JavaScript
+
+                <br><br>
+
+
+                Upload Resume
+
+                <input type="file">
+
+                <br><br>
+
+
+                <label>Country</label>
+
+                <select>
+
+                    <option>India</option>
+                    <option>USA</option>
+                    <option>Canada</option>
+
+                </select>
+
+                <br><br>
+
+
+                <label>Feedback</label>
+
+                <br>
+
+                <textarea
+                    rows="5"
+                    cols="30">
+                </textarea>
+
+                <br><br>
+
+
+                <input type="reset">
+
+                <input type="submit">
+
+            </form>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- AUDIO VIDEO -->
+
+        <section id="media">
+
+            <h2>Media</h2>
+
+            <h3>Audio</h3>
+
+            <audio controls>
+
+                <source src="audio.mp3">
+
+            </audio>
+
+
+            <h3>Video</h3>
+
+            <video
+                width="300"
+                controls>
+
+                <source src="video.mp4">
+
+            </video>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- IFRAME -->
+
+        <section>
+
+            <h2>Embedded Website</h2>
+
+            <iframe
+                src="https://example.com"
+                width="500"
+                height="200">
+
+            </iframe>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- CANVAS -->
+
+        <section>
+
+            <h2>Canvas</h2>
+
+            <canvas
+                width="250"
+                height="120"
+                style="border:1px solid black;">
+            </canvas>
+
+        </section>
+
+        <hr>
+
+
+
+        <!-- SVG -->
+
+        <section>
+
+            <h2>SVG Circle</h2>
+
+            <svg
+                width="200"
+                height="150">
+
+                <circle
+                    cx="70"
+                    cy="70"
+                    r="50"
+                    stroke="black"
+                    stroke-width="2"
+                    fill="red"/>
+
+            </svg>
+
+        </section>
+
+
+
+        <!-- ARTICLE -->
+
+        <article>
+
+            <h2>Article Example</h2>
+
+            <p>
+                This article can be read independently.
+            </p>
+
+        </article>
+
+
+
+        <!-- ASIDE -->
+
+        <aside>
+
+            <h3>Quick Tip</h3>
+
+            <p>
+                Practice HTML every day.
+            </p>
+
+        </aside>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <hr>
+
+        <p>
+            © 2026 HTML Revision Page
+        </p>
+
+        <a href="#top">
+            Back to Top
+        </a>
+
+    </footer>
+
+</body>
+
+</html>
