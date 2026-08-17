@@ -4,6 +4,7 @@ import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import './index.css'
 import App from './App.jsx'
+import { GlobalProvider } from './ContextAPI/Golbalvariable.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

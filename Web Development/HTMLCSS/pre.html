@@ -8,29 +8,41 @@
 
     <style>
         body {
-            background-color: rgb(170, 147, 147);
-            color: white;
+            background-color: #561e4c;
+            /* Dark navy */
+            color: #F8FAFC;
+            /* Off-white */
         }
 
         h2 {
-            color: blueviolet;
+            color: #f88bfa;
+            /* Soft purple */
         }
 
-        ol {
-            color: rgb(173, 90, 90);
+        dl {
+            color: #CBD5E1;
+            /* Light slate */
         }
 
+        ol,
         ul {
-            color: rgb(173, 90, 90);
+            color: #93C5FD;
+            /* Light blue */
         }
 
         nav {
             padding: 10px;
+            background-color: #301e3b;
         }
 
         nav a {
             margin-right: 20px;
-            color: white;
+            color: #F8FAFC;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #A78BFA;
         }
 
         nav img {
@@ -103,10 +115,63 @@
     </ol>
 
     <br>
+    <h2 id="ordered">Days</h2>
+
+    <ol>
+        <li>Monday</li>
+        <li>Tuesday</li>
+        <li value="5">Friday</li>
+        <li>Saturday</li>
+        <li>Sunday</li>
+    </ol>
+
+    <br>
+    <h2 id="unordered">OOPS</h2>
+
+    <ol type="A" start="3">
+        <li>Abstraction</li>
+        <li>Inheritance</li>
+        <li>Polymorphism</li>
+        <li>Encapsulation</li>
+    </ol>
+
+    <br>
+    <h2 id="unordered">TERMS</h2>
+
+    <ol>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li value="4">JavaScript</li>
+</ol>
+
+<ul type="square">
+    <li>HTML
+        <ul type="square">
+            <li>Tags</li>
+            <li>Attributes</li>
+        </ul>
+    </li>
+
+    <li>CSS
+        <ul type="square">
+            <li>Selectors</li>
+            <li>Properties</li>
+        </ul>
+    </li>
+
+    <li>JavaScript
+        <ul type="square">
+            <li>Variables</li>
+            <li>Functions</li>
+        </ul>
+    </li>
+</ul>
+
+    <br>
 
     <h2 id="unordered">Unordered List</h2>
 
-    <ul>
+    <ul type="circle">
         <li>Aryan</li>
         <li>Shani</li>
         <li>Kumail</li>
@@ -126,6 +191,14 @@
     </p>
 
     <br>
+
+    <dl>
+        <dt><u>Abstraction:-</u></dt>
+        <dd>Hiding unnecessary implementation details and showing only the essential features to the user.</dd>
+
+        <dt><u>Inheritance:- </u></dt>
+        <dd>A relationship where a child class inherits properties and methods from a parent class.</dd>
+    </dl>
 
 
     <a href="#head">Back to the head</a>
