@@ -8,50 +8,78 @@
 
     <style>
         a {
-            color: aqua;
+            color: #970747;
         }
 
         body {
-            background-color: #561e4c;
-            /* Dark navy */
-            color: #F8FAFC;
-            /* Off-white */
+            background-color: #FFFFFF;
+            color: #970747;
         }
 
         h2 {
-            color: #f88bfa;
-            /* Soft purple */
+            color: #970747;
         }
 
         dl {
-            color: #CBD5E1;
-            /* Light slate */
+            color: #333333;
         }
 
         ol,
         ul {
-            color: #93C5FD;
-            /* Light blue */
+            color: #970747;
         }
 
         nav {
             padding: 10px;
-            background-color: #301e3b;
+            background-color: #970747;
         }
 
         nav a {
             margin-right: 20px;
-            color: #F8FAFC;
+            color: #FFFFFF;
             text-decoration: none;
         }
 
         nav a:hover {
-            color: #A78BFA;
+            color: #FFFFFF;
         }
 
         nav img {
             vertical-align: middle;
             margin-right: 10px;
+        }
+
+        table {
+            width: 80%;
+            margin: 30px auto;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(151, 7, 71, 0.15);
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            border: 1px solid #970747;
+            text-align: center;
+        }
+
+        th {
+            background-color: #970747;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+
+        tr {
+            background-color: #FFFFFF;
+        }
+
+        dt {
+            color: #970747;
+        }
+
+        td {
+            color: #333333;
         }
     </style>
 </head>
@@ -183,6 +211,56 @@
 
     <br><br>
 
+    <table>
+        <tr>
+            <th colspan="4">Book Details</th>
+        </tr>
+
+        <tr>
+            <th colspan="4">Fiction Stream</th>
+        </tr>
+
+        <tr>
+            <th>Book Name</th>
+            <th>Author Name</th>
+            <th>Genre</th>
+            <th>Price</th>
+        </tr>
+
+        <tr>
+            <td>The Book Thief</td>
+            <td rowspan="2">Markus Zusak</td>
+            <td>Historical Fiction</td>
+            <td rowspan="2">₹499</td>
+        </tr>
+
+        <tr>
+            <td>The Book Thief: Special Edition</td>
+            <td>Historical Fiction</td>
+        </tr>
+
+        <tr>
+            <td>The Cruel Prince</td>
+            <td rowspan="2">Holly Black</td>
+            <td rowspan="2">Fantasy</td>
+            <td>₹399</td>
+        </tr>
+
+        <tr>
+            <td>The Wicked King</td>
+            
+            <td>₹450</td>
+        </tr>
+
+        <tr>
+            <td>The Silent Patient</td>
+            <td>Alex Michaelides</td>
+            <td>Psychological Fiction</td>
+            <td>₹450</td>
+        </tr>
+    </table>
+    <br>
+
     <h2 id="about">About</h2>
 
     <p>
@@ -225,7 +303,15 @@
             alt="Bottom Right">
     </map>
     <br>
+    <br>
 
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVQ4zlotPHhnNR02wKNo6ccwm2Kz0DLogdirSHTSnbXg&s=10"
+        width="300" height="300" usemap="#imagemap2" alt="triangle">
+
+    <map name="imagemap2">
+        <area shape="poly" coords="150,0,0,300,300,300" href="https://en.wikipedia.org/wiki/Triangle" alt="triangle">
+    </map>
+    <br>
     <a href="#head">Back to the head</a>
 
 </body>
