@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h1>KYC of Bank Customer</h1>
+    <form action="KYC.html">
+        
+        <fieldset id="step-personal">
+            <legend>1. Personal Details</legend>
+            Name:
+            <input type="text" name="name" id="Name"><br><br>
+            Date of Birth:
+            <input type="date" name="DOB" id="DOB"><br><br>
+            Email Address:
+            <input type="email" id="email" name="email" required placeholder="example@email.com"><br><br>
+            Gender:
+            <label><input type="radio" name="gender" value="male"> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+            <label><input type="radio" name="gender" value="other"> Other</label><br><br>
+            Phone Number:
+            <input type="tel" name="Phone Number" id="Phone Number" pattern="^[0-9]{10}$">
+        </fieldset>
+
+        <br>
+
+        <fieldset id="step-identity">
+            <legend>2. Identity Proof</legend>
+
+            Select ID Document
+            <select id="id-type" name="id_type" required>
+                <option value="" disabled selected>Choose an ID type</option>
+                <option value="pan">PAN Card</option>
+                <option value="aadhaar">Aadhaar Card</option>
+                <option value="passport">Passport</option>
+            </select>
+
+            <br><br>
+
+            Upload Document Photo
+            <input type="file" id="id-file" name="id_file" accept=".png,.jpg,.jpeg,.pdf" required />
+
+        </fieldset>
+
+        <input type="checkbox" name="terms" required />
+        I accept the
+        <a href="https://en.wikipedia.org/wiki/Know_your_customer" target="_blank" rel="noopener noreferrer">
+            KYC Terms & Guidelines.
+        </a>
+
+        <br><br>
+
+        <input type="submit" name="submit" id="submit">
+    </form>
+
+
+    <script src="" async defer></script>
+</body>
+
+</html>

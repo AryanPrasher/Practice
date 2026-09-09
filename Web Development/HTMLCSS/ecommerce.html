@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>E-Commerce</title>
+</head>
+
+<body>
+
+    <h2>Order Form</h2>
+
+    <form>
+
+        Item list:
+        <select name="item">
+            <option value="Soap">Soap</option>
+            <option value="Shampoo">Shampoo</option>
+        </select>
+
+        <br><br>
+
+        Quantity:
+        <input type="number" name="quantity" min="0" max="100" step="5">
+
+        <br><br>
+
+        Address:
+        <br>
+        <textarea name="address"></textarea>
+
+        <br><br>
+
+        Email:
+        <br>
+        <input type="email" name="email" required>
+
+        <br><br>
+
+        Mode of Payment:
+        <br>
+        <input type="radio" name="payment" value="Cash"> Cash on Delivery
+        <br>
+        <input type="radio" name="payment" value="UPI"> UPI
+        <br>
+        <input type="radio" name="payment" value="Card"> Card
+
+        <br><br>
+
+        Gender:
+        <br>
+        <input type="radio" name="gender" value="Male" onclick="showGender('Male')"> Male
+        <input type="radio" name="gender" value="Female" onclick="showGender('Female')"> Female
+
+        <br><br>
+
+        <fieldset>
+            <legend>Order</legend>
+
+            <input type="radio" name="order" value="confirm"
+                onclick="alert('Confirm')">
+            Confirm Order
+
+            <br>
+
+            <input type="radio" name="order" value="reject"
+                onclick="alert('Reject')">
+            Reject Order
+
+        </fieldset>
+
+        <br><br>
+
+        <input type="button" value="Submit" onclick="processForm()">
+
+    </form>
+
+    <script>
+
+        function showGender(gender) {
+            const usergender = document.getElementById("result");
+
+            if (gender === "Male") {
+                usergender.textContent = "Male";
+            } else {
+                usergender.textContent = "Female";
+            }
+        }
+
+        function showOrder(order) {
+            if (order === "Confirm") {
+                alert("Confirm Order");
+            } else {
+                alert("Reject Order");
+            }
+        }
+
+        function processForm() {
+            alert("Data submitted successfully");
+        }
+
+    </script>
+
+</body>
+
+</html>
