@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simple Cart</title>
+  <style>
+    body {
+      font-family: 'Franklin Gothic Medium';
+      text-align: center;
+      background-image: url("https://i.pinimg.com/1200x/62/c2/6b/62c26bcd4651802cd51cf0c7bf433734.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    button:hover{
+      color: rgb(224, 11, 47);
+    }
+
+    button{
+      color: rgb(228, 120, 138);
+      border-radius: 16px;
+    }
+
+    h1 {
+      color: rgb(228, 120, 138);
+
+    }
+
+    h3{
+      color:rgb(54, 90, 103)
+    }
+
+    hr{
+    color: rgb(228, 120, 138);
+
+    }
+    
+  </style>
+</head>
+
+<body>
+
+  <h1>Shopping Cart</h1>
+
+  <h3>Products</h3>
+  <p>Apple - Rs 10 <button onclick="addToCart(0)">Add</button></p>
+  <p>Banana - RS 5 <button onclick="addToCart(1)">Add</button></p>
+  <p>Orange - RS 8 <button onclick="addToCart(2)">Add</button></p>
+
+  <hr>
+
+  <h3>Cart</h3>
+  <div id="cart-box">Your cart is empty.</div>
+
+  <h3>Total: $<span id="total-box">0</span></h3>
+
+  <script>
+    var products = [
+      { name: "Apple", price: 10 },
+      { name: "Banana", price: 5 },
+      { name: "Orange", price: 8 }
+    ];
+
+    var cart = [];
+
+    function addToCart(index) {
+      cart.push(products[index]);
+      showCart();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      showCart();
+    }
+
+    function showCart() {
+      var cartBox = document.getElementById("cart-box");
+      var totalBox = document.getElementById("total-box");
+
+      var total = 0;
+      var text = "";
+
+      for (var i = 0; i < cart.length; i++) {
+        total = total + cart[i].price;
+
+        text = text + "<p>" + cart[i].name + " - $" + cart[i].price;
+        text = text + " <button onclick='removeFromCart(" + i + ")'>Remove</button></p>";
+      }
+
+      if (cart.length > 0) {
+        cartBox.innerHTML = text;
+      } else {
+        cartBox.innerHTML = "Your cart is empty.";
+      }
+
+      totalBox.innerText = total;
+    }
+  </script>
+
+</body>
+
+</html>

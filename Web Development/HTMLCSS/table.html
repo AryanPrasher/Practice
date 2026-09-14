@@ -65,3 +65,82 @@
 </body>
 
 </html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Cart</title>
+</head>
+<body>
+
+  <!-- Available Items -->
+  <h3>Products</h3>
+  <p>Apple - $10 <button onclick="addToCart(0)">Add</button></p>
+  <p>Banana - $5 <button onclick="addToCart(1)">Add</button></p>
+  <p>Orange - $8 <button onclick="addToCart(2)">Add</button></p>
+
+  <hr>
+
+  <!-- Cart Display -->
+  <h3>Cart</h3>
+  <div id="cart-box">Your cart is empty.</div>
+
+  <!-- Total Display -->
+  <h3>Total: $<span id="total-box">0</span></h3>
+
+  <script>
+    // 1. Array of product objects
+    var products = [
+      { name: "Apple", price: 10 },
+      { name: "Banana", price: 5 },
+      { name: "Orange", price: 8 }
+    ];
+
+    // 2. Empty array to hold cart items
+    var cart = [];
+
+    // 3. Add to cart
+    function addToCart(index) {
+      cart.push(products[index]);
+      showCart();
+    }
+
+    // 4. Remove from cart
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      showCart();
+    }
+
+    // 5. Update display and calculate total
+    function showCart() {
+      var cartBox = document.getElementById("cart-box");
+      var totalBox = document.getElementById("total-box");
+
+      // Reset total
+      var total = 0;
+      var text = "";
+
+      // Loop through cart items
+      for (var i = 0; i < cart.length; i++) {
+        // Add item price to total
+        total = total + cart[i].price;
+
+        // Build HTML for each item with a remove button
+        text = text + "<p>" + cart[i].name + " - $" + cart[i].price;
+        text = text + " <button onclick='removeFromCart(" + i + ")'>Remove</button></p>";
+      }
+
+      // If cart has items, show them. If empty, show empty message.
+      if (cart.length > 0) {
+        cartBox.innerHTML = text;
+      } else {
+        cartBox.innerHTML = "Your cart is empty.";
+      }
+
+      // Update total price on screen
+      totalBox.innerText = total;
+    }
+  </script>
+
+</body>
+</html>

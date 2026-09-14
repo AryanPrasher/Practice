@@ -1,22 +1,538 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <input type="text" name="" id="todo">
-        <button onclick="addtodo()">add todo</button>
-        <ol id="todolist"></ol>
-        
-        <script src="../JavaScript/todo.js" async defer></script>
+<html lang="en">
 
-        <a href="fiename.html#location_name">...</a>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aryan Prasher | Portfolio</title>
+
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+
+    margin: 0;
+    padding: 30px 15px;
+    background: #f4f6f8;
+    color: #222;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+
+
+    background-image: url("https://i.pinimg.com/1200x/62/c2/6b/62c26bcd4651802cd51cf0c7bf433734.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  header,
+  section {
+    
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 0 0 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Header layout */
+
+  header h1 {
+    margin: 0 0 5px 0;
+  }
+
+  header .role {
+    margin: 0 0 15px 0;
+  }
+
+  header p {
+    margin-top: 0;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+  }
+
+  .links a {
+    display: inline-block;
+    background: #1f4b7a;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 0;
+  }
+
+  .links a:hover {
+    background: #163858;
+  }
+
+  /* Headings */
+
+  h1,
+  h2 {
+    color: #1f4b7a;
+    margin-top: 0;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  /* Problem Solving */
+
+  .problem-solving {
+    background: white;
+    color: #333333;
+    border: none;
+  }
+
+  .problem-solving h2 {
+    color: #262626;
+  }
+
+  .problem-solving > p {
+    color: #666666;
+    margin-bottom: 0;
+  }
+
+  .leetcode-overview {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 35px;
+    align-items: center;
+    margin-top: 25px;
+  }
+
+  .solved-circle {
+    display: grid;
+    place-items: center;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #00b8a3 0 58%,
+      #ffc01e 58% 92%,
+      #ff5f5f 92% 100%
+    );
+  }
+
+  .circle-content {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    width: 130px;
+    height: 130px;
+    background: #f7f7f7;
+    border-radius: 50%;
+  }
+
+  .circle-content strong {
+    color: #262626;
+    font-size: 30px;
+  }
+
+  .circle-content span {
+    color: #777777;
+    font-size: 14px;
+  }
+
+  .difficulty-list {
+    width: 100%;
+  }
+
+  .difficulty-row {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  .difficulty-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .difficulty-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+    font-size: 14px;
+  }
+
+  .easy-text {
+    color: #00b8a3;
+  }
+
+  .medium-text {
+    color: #ffc01e;
+  }
+
+  .hard-text {
+    color: #ff5f5f;
+  }
+
+  .difficulty-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .difficulty-progress {
+    height: 100%;
+    border-radius: 10px;
+  }
+
+  .easy-progress {
+    width: 58%;
+    background: #00b8a3;
+  }
+
+  .medium-progress {
+    width: 34%;
+    background: #ffc01e;
+  }
+
+  .hard-progress {
+    width: 8%;
+    background: #ff5f5f;
+  }
+
+  /* Certifications */
+
+  ul {
+    margin: 15px 0 0 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 12px;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Projects */
+
+  .project {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    padding: 0 0 15px 0;
+    margin: 0 0 15px 0;
+  }
+
+  .project:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .project h3 {
+    margin: 0 0 8px 0;
+  }
+
+  .project p {
+    margin: 5px 0;
+  }
+
+  .project a {
+    color: #1f4b7a;
+  }
+
+  /* Footer */
+
+  footer {
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    padding: 5px 0;
+  }
+
+  footer p {
+    margin: 0;
+  }
+
+  /* Tablet */
+
+  @media (max-width: 650px) {
+    body {
+      padding: 20px 12px;
+    }
+
+    header,
+    section {
+      padding: 20px;
+    }
+
+    .leetcode-overview {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 25px;
+    }
+
+    .difficulty-list {
+      width: 100%;
+    }
+  }
+
+  /* Mobile */
+
+  @media (max-width: 500px) {
+    body {
+      padding: 15px 10px;
+    }
+
+    header,
+    section {
+      padding: 18px;
+    }
+
+    .links {
+      width: 100%;
+    }
+
+    .links a {
+      flex: 1;
+      text-align: center;
+    }
+
+    .solved-circle {
+      width: 145px;
+      height: 145px;
+    }
+
+    .circle-content {
+      width: 118px;
+      height: 118px;
+    }
+
+    .difficulty-info {
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header>
+      <h1>Aryan Prasher</h1>
+
+      <p class="role">Computer Science Student</p>
+
+      <p>
+        I am learning programming, web development, and problem solving.
+        This page shows my practice, certifications, and projects.
+      </p>
+
+      <div class="links">
+        <a href="https://linkedin.com" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
+
+        <a href="https://github.com" target="_blank" rel="noopener">
+          GitHub
+        </a>
+
+        <a href="https://leetcode.com" target="_blank" rel="noopener">
+          LeetCode
+        </a>
+      </div>
+    </header>
+
+
+    <!-- Problem Solving -->
+    <section class="problem-solving">
+
+      <h2>Problem Solving</h2>
+
+      <p>
+        I practise data structures, searching, and sorting problems.
+      </p>
+
+      <div class="leetcode-overview">
+
+        <div
+          class="solved-circle"
+          role="img"
+          aria-label="147 problems solved: 85 easy, 50 medium, and 12 hard"
+        >
+          <div class="circle-content">
+            <strong>147</strong>
+            <span>Solved</span>
+          </div>
+        </div>
+
+
+        <div class="difficulty-list">
+
+          <div class="difficulty-row">
+
+            <div class="difficulty-info">
+              <strong class="easy-text">Easy</strong>
+              <span>85 solved</span>
+            </div>
+
+            <div class="difficulty-bar">
+              <div class="difficulty-progress easy-progress"></div>
+            </div>
+
+          </div>
+
+
+          <div class="difficulty-row">
+
+            <div class="difficulty-info">
+              <strong class="medium-text">Medium</strong>
+              <span>50 solved</span>
+            </div>
+
+            <div class="difficulty-bar">
+              <div class="difficulty-progress medium-progress"></div>
+            </div>
+
+          </div>
+
+
+          <div class="difficulty-row">
+
+            <div class="difficulty-info">
+              <strong class="hard-text">Hard</strong>
+              <span>12 solved</span>
+            </div>
+
+            <div class="difficulty-bar">
+              <div class="difficulty-progress hard-progress"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Certifications -->
+    <section>
+
+      <h2>Certifications</h2>
+
+      <ul>
+        <li>
+          <strong>Python for Data Structures</strong>
+          - Coursera, May 2024
+        </li>
+
+        <li>
+          <strong>Frontend Web Development Basics</strong>
+          - freeCodeCamp, January 2024
+        </li>
+
+        <li>
+          <strong>Database Management Systems</strong>
+          - NPTEL, November 2023
+        </li>
+      </ul>
+
+    </section>
+
+
+    <!-- Projects -->
+    <section>
+
+      <h2>Projects</h2>
+
+
+      <div class="project">
+
+        <h3>
+          <a
+            href="https://ai-proctor-examination.vercel.app/"
+            target="_blank"
+            rel="noopener"
+          >
+            Student Attendance Management Portal
+          </a>
+        </h3>
+
+        <p>
+          A web app for recording attendance and creating student reports.
+        </p>
+
+        <p>
+          <strong>Used:</strong> HTML, CSS, JavaScript, MySQL
+        </p>
+
+      </div>
+
+
+      <div class="project">
+
+        <h3>
+          <a
+            href="https://aryanprasher-digital-portfolio.vercel.app/"
+            target="_blank"
+            rel="noopener"
+          >
+            Algorithmic Path Finder Visualizer
+          </a>
+        </h3>
+
+        <p>
+          A 2D grid tool that demonstrates BFS and Dijkstra's algorithm.
+        </p>
+
+        <p>
+          <strong>Used:</strong> Python, Tkinter, Data Structures
+        </p>
+
+      </div>
+
+
+      <div class="project">
+
+        <h3>Personal Expense Tracker</h3>
+
+        <p>
+          A dashboard for tracking income and expenses in the browser.
+        </p>
+
+        <p>
+          <strong>Used:</strong> HTML, CSS, JavaScript, Local Storage
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Aryan Prasher</p>
+    </footer>
+
+  </div>
+
+</body>
+
 </html>
-
-

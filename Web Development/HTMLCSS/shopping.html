@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h1>Shopping cart</h1>
+    <h3>Products</h3>
+    <p>Apple Rs.10 <button onclick="addtocart(0)">Add</button> </p>
+    <p>Banana Rs.5 <button onclick="addtocart(1)">Add</button> </p>
+    <p>Orange Rs.8 <button onclick="addtocart(2)">Add</button> </p>
+
+    <hr>
+
+    <h3>Cart</h3>
+    <div class="Cart-id">Your Cart is empty</div>
+
+    <h3>Total: Rs.<span id="total-box">0</span></h3>
+
+
+    <script>
+        var products = [
+            { name: "Apple", price: 10 },
+            { name: "Banana", price: 5 },
+            { name: "Orange", price: 8 }
+        ];
+
+        var cart = [];
+
+        function addtocart(index) {
+            cart.push(products[index]);
+            showcart();
+        }
+
+        function removefromcart(index) {
+            cart.splice(products[index]);
+            showcart();
+        
+
+        function showcart() {
+            var cartbox = document.getElementById('cart-box');
+            var totalbox = doctument.getElementById('total-box')
+        }
+
+        total = 0;
+        text = "";
+
+        for (var i = 0; i < cart.length; i++) {
+
+            total = total + cart[i].price;
+
+            text = text + "<p>" + cart[i].name + " - $" + cart[i].price;
+            text = text + " <button onclick='removeFromCart(" + i + ")'>Remove</button></p>";
+        }
+
+        if (cart.length > 0) {
+            cartBox.innerHTML = text;
+        } else {
+            cartBox.innerHTML = "Your cart is empty.";
+        }
+
+        totalBox.innerText = total;
+    }
+
+    </script>
+</body>
+
+</html>
