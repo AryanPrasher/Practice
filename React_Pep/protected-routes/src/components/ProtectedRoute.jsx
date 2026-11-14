@@ -10,8 +10,14 @@ export default function ProtectedRoute({ requiredRole }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // only checked once we already know someone is signed in
   if (requiredRole && user.role !== requiredRole) {
-    return <div className="page"><h1>Access denied</h1></div>;
+    return (
+      <div className="page">
+        <h1>Access denied</h1>
+        <p>You are signed in as {user.name}, but this page needs the "{requiredRole}" role.</p>
+      </div>
+    );
   }
 
   return <Outlet />;                // user is logged in - render the real page

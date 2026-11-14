@@ -1,21 +1,19 @@
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+// two fixed demo accounts, so the admin-role check can actually be tested
+const DEMO_ACCOUNTS = [
+  { name: "Bob", role: "user", avatarUrl: "/avatars/default.png" },
+  { name: "Alice", role: "admin", avatarUrl: "/avatars/default.png" },
+];
+
 export default function Login() {
-  const [name, setName] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login({
-      name,
-      avatarUrl: "/avatars/default.png",
-      role: name.toLowerCase() === "admin" ? "admin" : "user",
-    });
-
+  const handleLogin = (account) => {
+    login(account);
     const redirectTo = location.state?.from?.pathname ?? "/dashboard";
     navigate(redirectTo, { replace: true });
   };
@@ -28,15 +26,14 @@ export default function Login() {
           You tried to visit <code>{location.state.from.pathname}</code> – log in to continue.
         </p>
       )}
-      <form onSubmit={handleSubmit}>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+      <p>Pick a demo account:</p>
+      <div className="demo-accounts">
+        {DEMO_ACCOUNTS.map((account) => (
+          <button key={account.name} onClick={() => handleLogin(account)}>
+            Login as {account.name} ({account.role})
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
