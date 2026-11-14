@@ -10,7 +10,11 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login({ name, avatarUrl: "/avatars/default.png" });
+    login({
+      name,
+      avatarUrl: "/avatars/default.png",
+      role: name.toLowerCase() === "admin" ? "admin" : "user",
+    });
 
     const redirectTo = location.state?.from?.pathname ?? "/dashboard";
     navigate(redirectTo, { replace: true });

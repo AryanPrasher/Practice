@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -17,6 +18,9 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile/>}/>
+        </Route>
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/admin" element={<Admin />} />
         </Route>
       </Routes>
     </>
